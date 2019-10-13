@@ -1,11 +1,10 @@
 package com.inomera.telco.commons.config.reload;
 
+import com.inomera.telco.commons.config.ConfigurationHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.Trigger;
-
-import com.inomera.telco.commons.config.ConfigurationHolder;
 
 /**
  * Schedules re-loading with spring's TaskScheduler and Trigger classes.
@@ -13,33 +12,33 @@ import com.inomera.telco.commons.config.ConfigurationHolder;
  * @author Serdar Kuzucu
  */
 public class ScheduledConfigurationHolderReLoader implements ConfigurationHolderReLoader {
-	private static final Logger LOG = LoggerFactory.getLogger(ScheduledConfigurationHolderReLoader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ScheduledConfigurationHolderReLoader.class);
 
-	private final ConfigurationHolderReLoader delegate;
+    private final ConfigurationHolderReLoader delegate;
 
-	public ScheduledConfigurationHolderReLoader(ConfigurationHolderReLoader delegate, TaskScheduler taskScheduler, Trigger trigger) {
-		this.delegate = delegate;
-		taskScheduler.schedule(this::reloadConfigurationsScheduled, trigger);
-	}
+    public ScheduledConfigurationHolderReLoader(ConfigurationHolderReLoader delegate, TaskScheduler taskScheduler, Trigger trigger) {
+        this.delegate = delegate;
+        taskScheduler.schedule(this::reloadConfigurationsScheduled, trigger);
+    }
 
-	public ScheduledConfigurationHolderReLoader(ConfigurationHolder configurationHolder, TaskScheduler taskScheduler, Trigger trigger) {
-		this(new SyncConfigurationHolderReLoader(configurationHolder), taskScheduler, trigger);
-	}
+    public ScheduledConfigurationHolderReLoader(ConfigurationHolder configurationHolder, TaskScheduler taskScheduler, Trigger trigger) {
+        this(new SyncConfigurationHolderReLoader(configurationHolder), taskScheduler, trigger);
+    }
 
-	@Override
-	public void reloadConfigurations() {
-		LOG.info("reloadConfigurations started");
+    @Override
+    public void reloadConfigurations() {
+        LOG.info("reloadConfigurations started");
 
-		delegate.reloadConfigurations();
+        delegate.reloadConfigurations();
 
-		LOG.info("reloadConfigurations finished");
-	}
+        LOG.info("reloadConfigurations finished");
+    }
 
-	private void reloadConfigurationsScheduled() {
-		try {
-			this.reloadConfigurations();
-		} catch (Exception e) {
-			LOG.error("Error in reloadConfigurationsScheduled: {}", e.getMessage(), e);
-		}
-	}
+    private void reloadConfigurationsScheduled() {
+        try {
+            this.reloadConfigurations();
+        } catch (Exception e) {
+            LOG.error("Error in reloadConfigurationsScheduled: {}", e.getMessage(), e);
+        }
+    }
 }

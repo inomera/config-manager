@@ -8,5 +8,5 @@ import java.util.Map;
  * @author Serdar Kuzucu
  */
 public interface ConfigurationFetcherService {
-	Map<String, String> fetchConfiguration();
+    Map<String, String> fetchConfiguration();
 }

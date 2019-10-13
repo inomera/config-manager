@@ -9,7 +9,7 @@ import java.util.Map;
  * @author Serdar Kuzucu
  */
 public interface ConfigurationUpdateService {
-	void updateConfigurations(Map<String, Object> configurationsToUpdate);
+    void updateConfigurations(Map<String, Object> configurationsToUpdate);
 
-	void updateConcatConfiguration(String prefix, String value);
+    void updateConcatConfiguration(String prefix, String value);
 }

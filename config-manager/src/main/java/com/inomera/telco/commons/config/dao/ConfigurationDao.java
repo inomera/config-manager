@@ -6,11 +6,11 @@ import java.util.Map;
  * @author Serdar Kuzucu
  */
 public interface ConfigurationDao {
-	Map<String, String> findAllConfigurations();
+    Map<String, String> findAllConfigurations();
 
-	void insertNewConfiguration(String key, String value);
+    void insertNewConfiguration(String key, String value);
 
-	int updateConfiguration(String key, String value);
+    int updateConfiguration(String key, String value);
 
-	void deleteConfigurationsByPrefix(String prefix);
+    void deleteConfigurationsByPrefix(String prefix);
 }

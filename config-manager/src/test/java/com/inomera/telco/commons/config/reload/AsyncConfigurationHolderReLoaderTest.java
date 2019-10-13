@@ -1,13 +1,6 @@
 package com.inomera.telco.commons.config.reload;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import java.util.concurrent.Executor;
-
+import com.inomera.telco.commons.config.ConfigurationHolder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +9,10 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.inomera.telco.commons.config.ConfigurationHolder;
+import java.util.concurrent.Executor;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Serdar Kuzucu
@@ -24,64 +20,64 @@ import com.inomera.telco.commons.config.ConfigurationHolder;
 @ExtendWith(MockitoExtension.class)
 class AsyncConfigurationHolderReLoaderTest {
 
-	@Mock
-	private ConfigurationHolderReLoader delegate;
+    @Mock
+    private ConfigurationHolderReLoader delegate;
 
-	@Mock
-	private Executor executor;
+    @Mock
+    private Executor executor;
 
-	@Mock
-	private ConfigurationHolder configurationHolder;
+    @Mock
+    private ConfigurationHolder configurationHolder;
 
-	@Captor
-	private ArgumentCaptor<Runnable> runnableArgumentCaptor;
+    @Captor
+    private ArgumentCaptor<Runnable> runnableArgumentCaptor;
 
-	@Test
-	@DisplayName("Should call delegate when reloadConfigurations called")
-	void shouldCallDelegateOverExecutorWhenReloadConfigurationsCalled() {
-		final AsyncConfigurationHolderReLoader reLoader = new AsyncConfigurationHolderReLoader(delegate, executor);
+    @Test
+    @DisplayName("Should call delegate when reloadConfigurations called")
+    void shouldCallDelegateOverExecutorWhenReloadConfigurationsCalled() {
+        final AsyncConfigurationHolderReLoader reLoader = new AsyncConfigurationHolderReLoader(delegate, executor);
 
-		reLoader.reloadConfigurations();
+        reLoader.reloadConfigurations();
 
-		verify(executor, times(1)).execute(runnableArgumentCaptor.capture());
-		verify(delegate, never()).reloadConfigurations();
-		final Runnable runnable = runnableArgumentCaptor.getValue();
+        verify(executor, times(1)).execute(runnableArgumentCaptor.capture());
+        verify(delegate, never()).reloadConfigurations();
+        final Runnable runnable = runnableArgumentCaptor.getValue();
 
-		runnable.run();
+        runnable.run();
 
-		verify(delegate, times(1)).reloadConfigurations();
-	}
+        verify(delegate, times(1)).reloadConfigurations();
+    }
 
-	@Test
-	@DisplayName("Should call ConfigurationHolder when delegate is not provided")
-	void shouldCallConfigurationHolderWhenDelegateIsNotProvided() {
-		final AsyncConfigurationHolderReLoader reLoader = new AsyncConfigurationHolderReLoader(configurationHolder, executor);
+    @Test
+    @DisplayName("Should call ConfigurationHolder when delegate is not provided")
+    void shouldCallConfigurationHolderWhenDelegateIsNotProvided() {
+        final AsyncConfigurationHolderReLoader reLoader = new AsyncConfigurationHolderReLoader(configurationHolder, executor);
 
-		reLoader.reloadConfigurations();
+        reLoader.reloadConfigurations();
 
-		verify(executor, times(1)).execute(runnableArgumentCaptor.capture());
-		verify(configurationHolder, never()).reloadConfigurations();
-		final Runnable runnable = runnableArgumentCaptor.getValue();
+        verify(executor, times(1)).execute(runnableArgumentCaptor.capture());
+        verify(configurationHolder, never()).reloadConfigurations();
+        final Runnable runnable = runnableArgumentCaptor.getValue();
 
-		runnable.run();
+        runnable.run();
 
-		verify(configurationHolder, times(1)).reloadConfigurations();
-	}
+        verify(configurationHolder, times(1)).reloadConfigurations();
+    }
 
-	@Test
-	@DisplayName("Should catch exceptions in reloadConfigurations")
-	void shouldCatchExceptionsInReloadConfigurations() {
-		final AsyncConfigurationHolderReLoader reLoader = new AsyncConfigurationHolderReLoader(configurationHolder, executor);
-		doThrow(new RuntimeException("DEF")).when(configurationHolder).reloadConfigurations();
+    @Test
+    @DisplayName("Should catch exceptions in reloadConfigurations")
+    void shouldCatchExceptionsInReloadConfigurations() {
+        final AsyncConfigurationHolderReLoader reLoader = new AsyncConfigurationHolderReLoader(configurationHolder, executor);
+        doThrow(new RuntimeException("DEF")).when(configurationHolder).reloadConfigurations();
 
-		reLoader.reloadConfigurations();
+        reLoader.reloadConfigurations();
 
-		verify(executor, times(1)).execute(runnableArgumentCaptor.capture());
-		verify(configurationHolder, never()).reloadConfigurations();
-		final Runnable runnable = runnableArgumentCaptor.getValue();
+        verify(executor, times(1)).execute(runnableArgumentCaptor.capture());
+        verify(configurationHolder, never()).reloadConfigurations();
+        final Runnable runnable = runnableArgumentCaptor.getValue();
 
-		assertDoesNotThrow(runnable::run);
+        assertDoesNotThrow(runnable::run);
 
-		verify(configurationHolder, times(1)).reloadConfigurations();
-	}
+        verify(configurationHolder, times(1)).reloadConfigurations();
+    }
 }

@@ -45,115 +45,115 @@ import java.util.List;
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 public class ConfigManagerAutoConfiguration {
 
-	@Autowired
-	private ConfigManagerProperties configManagerProperties;
+    @Autowired
+    private ConfigManagerProperties configManagerProperties;
 
-	@Bean
-	@ConditionalOnMissingBean
-	public LockProvider lockProvider() {
-		return new LocalReentrantLockProvider();
-	}
+    @Bean
+    @ConditionalOnMissingBean
+    public LockProvider lockProvider() {
+        return new LocalReentrantLockProvider();
+    }
 
-	@Bean
-	@ConditionalOnMissingBean
-	public ConfigurationHolder configurationHolder(@Qualifier("configurationFetcherService") ConfigurationFetcherService configurationFetcherService) {
-		return new ConcurrentHashMapConfigurationHolder(configurationFetcherService);
-	}
+    @Bean
+    @ConditionalOnMissingBean
+    public ConfigurationHolder configurationHolder(@Qualifier("configurationFetcherService") ConfigurationFetcherService configurationFetcherService) {
+        return new ConcurrentHashMapConfigurationHolder(configurationFetcherService);
+    }
 
-	@Bean(name = "configurationHolderReLoaderTaskScheduler")
-	@ConditionalOnMissingBean(name = "configurationHolderReLoaderTaskScheduler")
-	public TaskScheduler configurationHolderReLoaderTaskScheduler() {
-		final ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-		threadPoolTaskScheduler.setPoolSize(1);
-		return threadPoolTaskScheduler;
-	}
+    @Bean(name = "configurationHolderReLoaderTaskScheduler")
+    @ConditionalOnMissingBean(name = "configurationHolderReLoaderTaskScheduler")
+    public TaskScheduler configurationHolderReLoaderTaskScheduler() {
+        final ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+        threadPoolTaskScheduler.setPoolSize(1);
+        return threadPoolTaskScheduler;
+    }
 
-	@Bean
-	@ConditionalOnProperty(name = "config-manager.auto-reload")
-	public ConfigurationHolderReLoader configurationHolderReLoader(
-			ConfigurationHolder configurationHolder,
-			@Qualifier("configurationHolderReLoaderTaskScheduler") TaskScheduler scheduler,
-			@Qualifier("configurationReloadTrigger") Trigger trigger
-	) {
-		return new ScheduledConfigurationHolderReLoader(configurationHolder, scheduler, trigger);
-	}
+    @Bean
+    @ConditionalOnProperty(name = "config-manager.auto-reload")
+    public ConfigurationHolderReLoader configurationHolderReLoader(
+            ConfigurationHolder configurationHolder,
+            @Qualifier("configurationHolderReLoaderTaskScheduler") TaskScheduler scheduler,
+            @Qualifier("configurationReloadTrigger") Trigger trigger
+    ) {
+        return new ScheduledConfigurationHolderReLoader(configurationHolder, scheduler, trigger);
+    }
 
-	@Bean(name = "configurationReloadTrigger")
-	@ConditionalOnProperty(name = "config-manager.reload-trigger", havingValue = "cron")
-	public Trigger configurationReloadCronTrigger() {
-		return new CronTrigger(configManagerProperties.getReloadCronExpression());
-	}
+    @Bean(name = "configurationReloadTrigger")
+    @ConditionalOnProperty(name = "config-manager.reload-trigger", havingValue = "cron")
+    public Trigger configurationReloadCronTrigger() {
+        return new CronTrigger(configManagerProperties.getReloadCronExpression());
+    }
 
-	@Bean(name = "configurationReloadTrigger")
-	@ConditionalOnProperty(name = "config-manager.reload-trigger", havingValue = "periodical")
-	public Trigger configurationReloadTrigger() {
-		return new PeriodicTrigger(configManagerProperties.getReloadPeriodInMilliseconds());
-	}
+    @Bean(name = "configurationReloadTrigger")
+    @ConditionalOnProperty(name = "config-manager.reload-trigger", havingValue = "periodical")
+    public Trigger configurationReloadTrigger() {
+        return new PeriodicTrigger(configManagerProperties.getReloadPeriodInMilliseconds());
+    }
 
-	@Configuration
-	@ConditionalOnProperty(name = "config-manager.source", havingValue = "jdbc")
-	public static class JdbcConfigurationSourceConfiguration {
+    @Configuration
+    @ConditionalOnProperty(name = "config-manager.source", havingValue = "jdbc")
+    public static class JdbcConfigurationSourceConfiguration {
 
-		@Autowired
-		private ConfigManagerProperties configManagerProperties;
+        @Autowired
+        private ConfigManagerProperties configManagerProperties;
 
-		@Bean(name = "configManagerDataSource")
-		@ConditionalOnMissingBean(name = "configManagerDataSource")
-		public DataSource configManagerDataSource() {
-			final DataSourceProperties dataSourceProperties = configManagerProperties.getDataSource();
+        @Bean(name = "configManagerDataSource")
+        @ConditionalOnMissingBean(name = "configManagerDataSource")
+        public DataSource configManagerDataSource() {
+            final DataSourceProperties dataSourceProperties = configManagerProperties.getDataSource();
 
-			final DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-			dataSourceBuilder.driverClassName(dataSourceProperties.getDriverClassName());
-			dataSourceBuilder.url(dataSourceProperties.getUrl());
-			dataSourceBuilder.username(dataSourceProperties.getUsername());
-			dataSourceBuilder.password(dataSourceProperties.getPassword());
-			return dataSourceBuilder.build();
-		}
+            final DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+            dataSourceBuilder.driverClassName(dataSourceProperties.getDriverClassName());
+            dataSourceBuilder.url(dataSourceProperties.getUrl());
+            dataSourceBuilder.username(dataSourceProperties.getUsername());
+            dataSourceBuilder.password(dataSourceProperties.getPassword());
+            return dataSourceBuilder.build();
+        }
 
-		@Bean
-		@ConditionalOnMissingBean
-		@ConditionalOnBean(value = DataSource.class, name = "configManagerDataSource")
-		public ConfigurationDao configurationDao(@Qualifier("configManagerDataSource") DataSource dataSource) {
-			final ConfigManagerProperties.SqlStatements sql = configManagerProperties.getSql();
-			return new NamedParameterJdbcTemplateConfigurationDaoImpl(dataSource, sql.getSelect(), sql.getInsert(), sql.getUpdate(), sql.getDeleteByPrefix());
-		}
+        @Bean
+        @ConditionalOnMissingBean
+        @ConditionalOnBean(value = DataSource.class, name = "configManagerDataSource")
+        public ConfigurationDao configurationDao(@Qualifier("configManagerDataSource") DataSource dataSource) {
+            final ConfigManagerProperties.SqlStatements sql = configManagerProperties.getSql();
+            return new NamedParameterJdbcTemplateConfigurationDaoImpl(dataSource, sql.getSelect(), sql.getInsert(), sql.getUpdate(), sql.getDeleteByPrefix());
+        }
 
-		@Bean(name = "configManagerTransactionTemplate")
-		@ConditionalOnBean(value = DataSource.class, name = "configManagerDataSource")
-		@ConditionalOnMissingBean(name = "configManagerTransactionTemplate")
-		public TransactionTemplate configManagerTransactionTemplate(@Qualifier("configManagerDataSource") DataSource dataSource) {
-			final DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
-			return new TransactionTemplate(transactionManager);
-		}
+        @Bean(name = "configManagerTransactionTemplate")
+        @ConditionalOnBean(value = DataSource.class, name = "configManagerDataSource")
+        @ConditionalOnMissingBean(name = "configManagerTransactionTemplate")
+        public TransactionTemplate configManagerTransactionTemplate(@Qualifier("configManagerDataSource") DataSource dataSource) {
+            final DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
+            return new TransactionTemplate(transactionManager);
+        }
 
-		@Bean
-		@ConditionalOnMissingBean
-		public ConfigurationFetcherService configurationFetcherService(
-				@Qualifier("configManagerTransactionTemplate") TransactionTemplate transactionTemplate,
-				LockProvider lockProvider,
-				ConfigurationDao configurationDao
-		) {
-			final int concatConfigurationMaxLength = configManagerProperties.getValueColumnLength();
-			return new DaoConfigurationService(transactionTemplate, lockProvider, configurationDao, concatConfigurationMaxLength);
-		}
-	}
+        @Bean
+        @ConditionalOnMissingBean
+        public ConfigurationFetcherService configurationFetcherService(
+                @Qualifier("configManagerTransactionTemplate") TransactionTemplate transactionTemplate,
+                LockProvider lockProvider,
+                ConfigurationDao configurationDao
+        ) {
+            final int concatConfigurationMaxLength = configManagerProperties.getValueColumnLength();
+            return new DaoConfigurationService(transactionTemplate, lockProvider, configurationDao, concatConfigurationMaxLength);
+        }
+    }
 
-	@Configuration
-	@ConditionalOnProperty(name = "config-manager.source", havingValue = "properties")
-	public static class PropertiesConfigurationSourceConfiguration {
+    @Configuration
+    @ConditionalOnProperty(name = "config-manager.source", havingValue = "properties")
+    public static class PropertiesConfigurationSourceConfiguration {
 
-		@Autowired
-		private ConfigManagerProperties configManagerProperties;
+        @Autowired
+        private ConfigManagerProperties configManagerProperties;
 
-		@Bean
-		@ConditionalOnMissingBean
-		public ConfigurationFetcherService configurationFetcherService(ApplicationContext applicationContext) {
-			return new PropertyResourceConfigurationFetcherService(false, getResources(applicationContext));
-		}
+        @Bean
+        @ConditionalOnMissingBean
+        public ConfigurationFetcherService configurationFetcherService(ApplicationContext applicationContext) {
+            return new PropertyResourceConfigurationFetcherService(false, getResources(applicationContext));
+        }
 
-		private Resource[] getResources(ApplicationContext applicationContext) {
-			final List<String> propertyFiles = configManagerProperties.getPropertyFiles();
-			return propertyFiles.stream().map(applicationContext::getResource).toArray(Resource[]::new);
-		}
-	}
+        private Resource[] getResources(ApplicationContext applicationContext) {
+            final List<String> propertyFiles = configManagerProperties.getPropertyFiles();
+            return propertyFiles.stream().map(applicationContext::getResource).toArray(Resource[]::new);
+        }
+    }
 }
