@@ -51,7 +51,7 @@ version=`cat VERSION`
 echo "Version: ${version}"
 
 # run build & tests
-./gradlew clean build
+../gradlew clean build
 
 # tag it
 git add -A
@@ -61,4 +61,4 @@ git push
 git push --tags
 
 # publish it
-./gradlew :config-manager:publish
+../gradlew :config-manager:publish
