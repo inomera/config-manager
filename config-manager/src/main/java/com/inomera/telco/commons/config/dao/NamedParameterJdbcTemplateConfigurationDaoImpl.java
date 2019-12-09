@@ -51,7 +51,7 @@ public class NamedParameterJdbcTemplateConfigurationDaoImpl implements Configura
             return new String[]{settingName, settingValue};
         };
         final List<String[]> results = jdbcTemplate.query(selectSql, rowMapper);
-        return results.stream().collect(Collectors.toMap(row -> row[0], row -> row[1]));
+        return results.stream().collect(Collectors.toMap(row -> row[0], row -> row[1], (firstValue, secondValue) -> secondValue));
     }
 
     public void insertNewConfiguration(String key, String value) {
