@@ -5,3 +5,6 @@ project(':config-manager').name = 'config-manager'
 
 include 'spring-config-manager-starter'
 project(':spring-config-manager-starter').name = 'spring-config-manager-starter'
+
+include 'example'
+project(':example').name = 'config-manager-example'

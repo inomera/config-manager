@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: 'jdbc:h2:mem:testdb'
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+config-manager:
+  enabled: true
+  source: jdbc
+  auto-reload: true
+  reload-trigger: periodical
+  reload-period-in-milliseconds: 60000
+  value-column-length: 90000000
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: 'jdbc:h2:mem:testdb'
+    username: sa
+    password: password
+  sql:
+    insert: INSERT INTO APP_SETTINGS (APPLICATION, PROFILE, LABEL, KEY, VALUE) VALUES ('mt-processing', 'dev', 'master', ?, ?)
+    select: SELECT KEY, VALUE FROM APP_SETTINGS ORDER BY CASE WHEN APPLICATION = 'application' THEN 0 DEFAULT 1 END
+    update: UPDATE APP_SETTINGS SET VALUE = ? WHERE KEY = ?
+    delete-by-prefix: DELETE FROM APP_SETTINGS WHERE KEY LIKE CONCAT(:prefix, '.%')
