@@ -3,8 +3,8 @@ subprojects {
         mavenCentral()
         maven {
             credentials {
-                username 'telco-maven-read-only'
-                password '504B4CFAD88E48E532BFD939B22C5B3A'
+                username 'admin'
+                password '564FB47454AF25CBCA9D225F181BB4E1'
             }
             url 'https://nexus.telco.inomera.com/repository/maven-releases'
         }
