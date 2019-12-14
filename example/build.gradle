@@ -27,7 +27,7 @@ dependencies {
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	implementation 'com.inomera.telco.commons:spring-config-manager-starter:1.0.6'
+	implementation 'com.inomera.telco.commons:spring-config-manager-starter:1.0.5'
 	implementation 'com.inomera.telco.commons:config-manager:1.0.2'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
