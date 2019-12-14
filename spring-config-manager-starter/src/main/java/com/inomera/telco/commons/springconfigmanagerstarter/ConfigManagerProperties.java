@@ -26,7 +26,7 @@ public class ConfigManagerProperties {
     private List<String> propertyFiles = new ArrayList<>();
     private int reloadPeriodInMilliseconds;
     private String reloadCronExpression;
-    private DataSourceProperties dataSource;
+    private DataSourceProperties dataSourceProperties;
 
     @Getter
     @Setter

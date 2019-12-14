@@ -12,12 +12,14 @@ import com.inomera.telco.commons.config.service.PropertyResourceConfigurationFet
 import com.inomera.telco.commons.lock.LockProvider;
 import com.inomera.telco.commons.lock.reentrant.LocalReentrantLockProvider;
 import com.inomera.telco.commons.springconfigmanagerstarter.ConfigManagerProperties.DataSourceProperties;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.ApplicationContext;
@@ -99,8 +101,9 @@ public class ConfigManagerAutoConfiguration {
 
         @Bean(name = "configManagerDataSource")
         @ConditionalOnMissingBean(name = "configManagerDataSource")
+        @ConfigurationProperties("config-manager.source.hikari")
         public DataSource configManagerDataSource() {
-            final DataSourceProperties dataSourceProperties = configManagerProperties.getDataSource();
+            final DataSourceProperties dataSourceProperties = configManagerProperties.getDataSourceProperties();
 
             final DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
             dataSourceBuilder.driverClassName(dataSourceProperties.getDriverClassName());

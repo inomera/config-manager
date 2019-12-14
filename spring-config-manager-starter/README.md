@@ -10,6 +10,10 @@ config-manager:
     url: jdbc:oracle:thin:@127.0.0.1:1521:XE
     username: SA
     password: as
+    hikari:
+      poolName: config-manager-hikari-pool
+      maximum-pool-size: 1
+      minimum-idle: 1
   sql:
     select: SELECT SETTING_NAME, SETTING_VALUE FROM APP_SETTINGS
     update: UPDATE APP_SETTINGS SET SETTING_VALUE = ? WHERE SETTING_NAME = ?

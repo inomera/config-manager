@@ -19,6 +19,10 @@ config-manager:
     url: 'jdbc:h2:mem:testdb'
     username: sa
     password: password
+    hikari:
+      poolName: config-manager-hikari-pool
+      maximum-pool-size: 1
+      minimum-idle: 1
   sql:
     insert: INSERT INTO APP_SETTINGS (APPLICATION, PROFILE, LABEL, KEY, VALUE) VALUES ('mt-processing', 'dev', 'master', ?, ?)
     select: SELECT KEY, VALUE FROM APP_SETTINGS ORDER BY CASE WHEN APPLICATION = 'application' THEN 0 DEFAULT 1 END
