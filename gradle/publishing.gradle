@@ -3,11 +3,11 @@ apply plugin: 'maven-publish'
 
 def repoUser = project.findProperty('telcoTeamUsername')
         ?: System.getenv('telcoTeamUsername')
-        ?: 'admin'
+        ?: 'Not Specified'
 
 def repoPass = project.findProperty('telcoTeamPassword')
         ?: System.getenv('telcoTeamPassword')
-        ?: '564FB47454AF25CBCA9D225F181BB4E1'
+        ?: 'Not Specified'
 
 publishing {
     repositories {
