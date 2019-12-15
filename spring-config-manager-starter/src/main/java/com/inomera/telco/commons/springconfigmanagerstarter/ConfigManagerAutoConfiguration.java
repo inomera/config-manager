@@ -103,7 +103,7 @@ public class ConfigManagerAutoConfiguration {
         @ConditionalOnMissingBean(name = "configManagerDataSource")
         @ConfigurationProperties("config-manager.datasource.hikari")
         public DataSource configManagerDataSource() {
-            final DataSourceProperties dataSourceProperties = configManagerProperties.getDataSourceProperties();
+            final DataSourceProperties dataSourceProperties = configManagerProperties.getDataSource();
 
             final DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
             dataSourceBuilder.driverClassName(dataSourceProperties.getDriverClassName());

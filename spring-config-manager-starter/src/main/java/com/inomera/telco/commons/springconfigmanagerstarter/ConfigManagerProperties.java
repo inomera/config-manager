@@ -26,7 +26,7 @@ public class ConfigManagerProperties {
     private List<String> propertyFiles = new ArrayList<>();
     private int reloadPeriodInMilliseconds;
     private String reloadCronExpression;
-    private DataSourceProperties dataSourceProperties;
+    private DataSourceProperties dataSource;
 
     @Getter
     @Setter
@@ -39,7 +39,6 @@ public class ConfigManagerProperties {
 
     @Getter
     @Setter
-    @ConfigurationProperties(prefix = "config-manager.datasource")
     public static class DataSourceProperties {
         private String driverClassName;
         private String url;
