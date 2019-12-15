@@ -20,7 +20,7 @@ config-manager:
     username: sa
     password: password
     hikari:
-      poolName: config-manager-hikari-pool
+      poolName: config-manager-db-pool
       maximum-pool-size: 1
       minimum-idle: 1
   sql:
