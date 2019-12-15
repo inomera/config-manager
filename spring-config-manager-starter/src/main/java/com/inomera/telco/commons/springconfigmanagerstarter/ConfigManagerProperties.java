@@ -39,6 +39,7 @@ public class ConfigManagerProperties {
 
     @Getter
     @Setter
+    @ConfigurationProperties(prefix = "config-manager.datasource")
     public static class DataSourceProperties {
         private String driverClassName;
         private String url;
