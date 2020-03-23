@@ -463,7 +463,8 @@ class ConcurrentHashMapConfigurationHolderTest {
     @Test
     @DisplayName("add On Change Listener for Configuration changes")
     void addOnChangeListener() {
-        final ConfigurationChangeListener listener = (oldValue, newValue) -> {
+        final ConfigurationChangeListener listener = (configKey, oldValue, newValue) -> {
+
         };
         final String listenerId = configurationHolder.addOnChangeListener("configKey", listener);
         final ConfigurationChangeListener removedListener = configurationHolder.removeOnChangeListener(listenerId);
@@ -481,11 +482,13 @@ class ConcurrentHashMapConfigurationHolderTest {
     @Test
     @DisplayName("remove On Change Listener in different order")
     void removeOnChangeListenerInDifferentOrder() {
-        ConfigurationChangeListener listener1 = (oldValue, newValue) -> {
+        ConfigurationChangeListener listener1 = (configKey, oldValue, newValue) -> {
+
         };
-        ConfigurationChangeListener listener2 = (oldValue, newValue) -> {
+        ConfigurationChangeListener listener2 = (configKey, oldValue, newValue) -> {
+
         };
-        ConfigurationChangeListener listener3 = (oldValue, newValue) -> {
+        ConfigurationChangeListener listener3 = (configKey, oldValue, newValue) -> {
         };
 
         final String listenerId1 = configurationHolder.addOnChangeListener("configKey", listener1);
@@ -505,11 +508,20 @@ class ConcurrentHashMapConfigurationHolderTest {
     @DisplayName("reloadConfigurations should change detection")
     void reloadConfigurations_shouldChangeDetection() {
         AtomicBoolean isListenerCalled = new AtomicBoolean(false);
-        ConfigurationChangeListener listener = (oldValue, newValue) -> {
+
+        final Map<String, String> configurationsMap = new HashMap<>();
+        configurationsMap.put("stringProp", "test1");
+
+        configurationHolder.addOnChangeListener("stringProp", (configKey, oldValue, newValue) -> {
+            assertEquals("test1", newValue);
+            assertEquals("test",oldValue);
+            assertEquals("stringProp", configKey);
             isListenerCalled.set(true);
-        };
+        });
+
+        when(configurationFetcherService.fetchConfiguration()).thenReturn(configurationsMap);
         configurationHolder.reloadConfigurations();
-        assertFalse(isListenerCalled.get());
+        assertTrue(isListenerCalled.get());
     }
 
     @Test

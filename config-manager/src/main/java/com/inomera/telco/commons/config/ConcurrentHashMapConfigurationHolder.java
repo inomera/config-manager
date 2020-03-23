@@ -18,7 +18,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Caches all configuration into a ConcurrentHashMap. Reloads the map every 60 seconds
+ * Caches all configuration into a ConcurrentHashMap. Reloads the changeListeners every 60 seconds
  *
  * @author Serdar Kuzucu
  */
@@ -27,7 +27,7 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
     private static final String TRUE = "true";
     private static final String FALSE = "false";
 
-    private Map<String, Map<String, ConfigurationChangeListener>> map = new ConcurrentHashMap<>();
+    private Map<String, Map<String, ConfigurationChangeListener>> changeListeners = new ConcurrentHashMap<>();
     private Map<String, String> configurationsLocalMap = new ConcurrentHashMap<>();
 
     private Lock configurationsLocalMapLock = new ReentrantLock();
@@ -53,8 +53,8 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
 
     @Override
     public String getConcatStringProperty(String prefix) {
-        // Hold a reference to the map for thread safety!
-        // Because the map may change in the middle of for loop below!
+        // Hold a reference to the changeListeners for thread safety!
+        // Because the changeListeners may change in the middle of for loop below!
         final Map<String, String> configurationsMap = configurationsLocalMap;
         final StringBuilder sb = new StringBuilder();
 
@@ -142,7 +142,7 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
     @Override
     public void reloadConfigurations() {
         try {
-            // I do not want two threads to update the map at the same time.
+            // I do not want two threads to update the changeListeners at the same time.
             configurationsLocalMapLock.lock();
             LOG.info("Reloading system properties..");
 
@@ -159,8 +159,8 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
 
                 configKeysSet.stream().filter(configKey -> !Objects.equals(configurationsLocalMap.get(configKey),
                         tmpConfigurationsMap.get(configKey))).forEach(configKey ->
-                        map.getOrDefault(configKey, Collections.emptyMap()).values().forEach(listener ->
-                                addOnChangeListener(configKey, listener)));
+                        changeListeners.getOrDefault(configKey, Collections.emptyMap()).values().forEach(listener ->
+                                listener.onChange(configKey, configurationsLocalMap.get(configKey), tmpConfigurationsMap.get(configKey))));
 
                 configurationsLocalMap = tmpConfigurationsMap;
             }
@@ -172,19 +172,15 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
     @Override
     public String addOnChangeListener(String configKey, ConfigurationChangeListener listener) {
         final String listenerId = UUID.randomUUID().toString();
-        if (map.isEmpty()) {
-            Map<String, ConfigurationChangeListener> listenerMap = new ConcurrentHashMap<>();
-            listenerMap.put(listenerId, listener);
-            map.put(configKey, listenerMap);
-        } else {
-            map.get(configKey).put(listenerId, listener);
-        }
+        changeListeners.computeIfAbsent(configKey, k -> new ConcurrentHashMap<>())
+                .put(listenerId, listener);
         return listenerId;
     }
 
+
     @Override
     public ConfigurationChangeListener removeOnChangeListener(String listenerId) {
-        return map.values()
+        return changeListeners.values()
                 .stream()
                 .map(subMap -> subMap.remove(listenerId))
                 .filter(Objects::nonNull)
