@@ -1,5 +1,7 @@
 package com.inomera.telco.commons.config;
 
+import com.inomera.telco.commons.config.change.ConfigurationChangeListener;
+
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -41,4 +43,8 @@ public interface ConfigurationHolder {
     Properties getJavaProperties(String key);
 
     void reloadConfigurations();
+
+    String addOnChangeListener(String configKey, ConfigurationChangeListener listener);
+
+    ConfigurationChangeListener removeOnChangeListener(String listenerId);
 }
