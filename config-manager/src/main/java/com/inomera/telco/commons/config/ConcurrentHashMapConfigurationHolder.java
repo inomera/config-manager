@@ -18,7 +18,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Caches all configuration into a ConcurrentHashMap. Reloads the changeListeners every 60 seconds
+ * Caches all configuration into a ConcurrentHashMap. Reloads the map every 60 seconds
  *
  * @author Serdar Kuzucu
  */
@@ -53,8 +53,8 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
 
     @Override
     public String getConcatStringProperty(String prefix) {
-        // Hold a reference to the changeListeners for thread safety!
-        // Because the changeListeners may change in the middle of for loop below!
+        // Hold a reference to the map for thread safety!
+        // Because the map may change in the middle of for loop below!
         final Map<String, String> configurationsMap = configurationsLocalMap;
         final StringBuilder sb = new StringBuilder();
 
@@ -142,7 +142,7 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
     @Override
     public void reloadConfigurations() {
         try {
-            // I do not want two threads to update the changeListeners at the same time.
+            // I do not want two threads to update the map at the same time.
             configurationsLocalMapLock.lock();
             LOG.info("Reloading system properties..");
 
@@ -176,7 +176,6 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
                 .put(listenerId, listener);
         return listenerId;
     }
-
 
     @Override
     public ConfigurationChangeListener removeOnChangeListener(String listenerId) {
