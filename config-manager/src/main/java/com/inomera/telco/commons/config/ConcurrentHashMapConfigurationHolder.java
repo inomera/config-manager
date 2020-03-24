@@ -3,6 +3,7 @@ package com.inomera.telco.commons.config;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import com.inomera.telco.commons.config.change.ConfigurationChangeListener;
 import com.inomera.telco.commons.config.service.ConfigurationFetcherService;
 import com.inomera.telco.commons.lang.function.ThrowableFunction;
 import org.apache.commons.lang.BooleanUtils;
@@ -26,6 +27,7 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
     private static final String TRUE = "true";
     private static final String FALSE = "false";
 
+    private Map<String, Map<String, ConfigurationChangeListener>> changeListeners = new ConcurrentHashMap<>();
     private Map<String, String> configurationsLocalMap = new ConcurrentHashMap<>();
 
     private Lock configurationsLocalMapLock = new ReentrantLock();
@@ -149,11 +151,40 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
 
             // check for emptiness. db problem might occur. keep current config.
             if (!tmpConfigurationsMap.isEmpty()) {
+
+                final Set<String> oldKeysSet = configurationsLocalMap.keySet();
+                Set<String> configKeysSet = new HashSet<>(oldKeysSet);
+                final Set<String> newKeysSet = tmpConfigurationsMap.keySet();
+                configKeysSet.addAll(newKeysSet);
+
+                configKeysSet.stream().filter(configKey -> !Objects.equals(configurationsLocalMap.get(configKey),
+                        tmpConfigurationsMap.get(configKey))).forEach(configKey ->
+                        changeListeners.getOrDefault(configKey, Collections.emptyMap()).values().forEach(listener ->
+                                listener.onChange(configKey, configurationsLocalMap.get(configKey), tmpConfigurationsMap.get(configKey))));
+
                 configurationsLocalMap = tmpConfigurationsMap;
             }
         } finally {
             configurationsLocalMapLock.unlock();
         }
+    }
+
+    @Override
+    public String addOnChangeListener(String configKey, ConfigurationChangeListener listener) {
+        final String listenerId = UUID.randomUUID().toString();
+        changeListeners.computeIfAbsent(configKey, k -> new ConcurrentHashMap<>())
+                .put(listenerId, listener);
+        return listenerId;
+    }
+
+    @Override
+    public ConfigurationChangeListener removeOnChangeListener(String listenerId) {
+        return changeListeners.values()
+                .stream()
+                .map(subMap -> subMap.remove(listenerId))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
     }
 
     private Boolean toBoolean(String value) {

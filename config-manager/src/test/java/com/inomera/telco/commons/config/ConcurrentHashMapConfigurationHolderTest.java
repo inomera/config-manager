@@ -1,5 +1,6 @@
 package com.inomera.telco.commons.config;
 
+import com.inomera.telco.commons.config.change.ConfigurationChangeListener;
 import com.inomera.telco.commons.config.service.ConfigurationFetcherService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -456,6 +458,70 @@ class ConcurrentHashMapConfigurationHolderTest {
         assertNotNull(properties);
         assertEquals("valueOne", properties.getProperty("propertyOne"));
         assertEquals("valueTwo", properties.getProperty("propertyTwo"));
+    }
+
+    @Test
+    @DisplayName("add On Change Listener for Configuration changes")
+    void addOnChangeListener() {
+        final ConfigurationChangeListener listener = (configKey, oldValue, newValue) -> {
+
+        };
+        final String listenerId = configurationHolder.addOnChangeListener("configKey", listener);
+        final ConfigurationChangeListener removedListener = configurationHolder.removeOnChangeListener(listenerId);
+        assertSame(listener, removedListener);
+    }
+
+    @Test
+    @DisplayName("remove non existent listener for configurations")
+    void removeNonExistentListenerForConfigurations() {
+        final String listenerId = UUID.randomUUID().toString();
+        final ConfigurationChangeListener removedListener = configurationHolder.removeOnChangeListener(listenerId);
+        assertNull(removedListener);
+    }
+
+    @Test
+    @DisplayName("remove On Change Listener in different order")
+    void removeOnChangeListenerInDifferentOrder() {
+        ConfigurationChangeListener listener1 = (configKey, oldValue, newValue) -> {
+
+        };
+        ConfigurationChangeListener listener2 = (configKey, oldValue, newValue) -> {
+
+        };
+        ConfigurationChangeListener listener3 = (configKey, oldValue, newValue) -> {
+        };
+
+        final String listenerId1 = configurationHolder.addOnChangeListener("configKey", listener1);
+        final String listenerId2 = configurationHolder.addOnChangeListener("configKey", listener2);
+        final String listenerId3 = configurationHolder.addOnChangeListener("configKey", listener3);
+
+        final ConfigurationChangeListener removedListener2 = configurationHolder.removeOnChangeListener(listenerId2);
+        final ConfigurationChangeListener removedListener3 = configurationHolder.removeOnChangeListener(listenerId3);
+        final ConfigurationChangeListener removedListener1 = configurationHolder.removeOnChangeListener(listenerId1);
+
+        assertSame(listener1, removedListener1);
+        assertSame(listener2, removedListener2);
+        assertSame(listener3, removedListener3);
+    }
+
+    @Test
+    @DisplayName("reloadConfigurations should change detection")
+    void reloadConfigurations_shouldChangeDetection() {
+        AtomicBoolean isListenerCalled = new AtomicBoolean(false);
+
+        final Map<String, String> configurationsMap = new HashMap<>();
+        configurationsMap.put("stringProp", "test1");
+
+        configurationHolder.addOnChangeListener("stringProp", (configKey, oldValue, newValue) -> {
+            assertEquals("test1", newValue);
+            assertEquals("test",oldValue);
+            assertEquals("stringProp", configKey);
+            isListenerCalled.set(true);
+        });
+
+        when(configurationFetcherService.fetchConfiguration()).thenReturn(configurationsMap);
+        configurationHolder.reloadConfigurations();
+        assertTrue(isListenerCalled.get());
     }
 
     @Test
