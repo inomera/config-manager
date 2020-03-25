@@ -33,7 +33,8 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.1.7.RELEASE'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
 
-    api 'com.inomera.telco.commons:config-manager:1.0.2'
+    api project(':config-manager-api')
+    api project(':config-manager-reload')
     api 'com.inomera.telco.commons:lock-provider:1.2.0'
 
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.2.0')

@@ -22,9 +22,9 @@ public class ConfigManagerExampleApplication {
         final ConfigurableApplicationContext context = SpringApplication.run(ConfigManagerExampleApplication.class, args);
         final ConfigurationHolder configurationHolder = context.getBean(ConfigurationHolder.class);
 
-        final String demoValue = configurationHolder.getStringProperty("DEMO");
+        final String demoValue = configurationHolder.getStringProperty("first-key");
 
-        LOG.info("Demo: {}", demoValue);
+        LOG.info("first-key: {}", demoValue);
     }
 
     @Configuration
