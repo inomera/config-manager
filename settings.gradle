@@ -1,7 +1,16 @@
 rootProject.name = 'telco-commons-config-manager'
 
-include 'config-manager'
-project(':config-manager').name = 'config-manager'
+include 'config-manager-api'
+project(':config-manager-api').name = 'config-manager-api'
+
+include 'config-manager-jdbc'
+project(':config-manager-jdbc').name = 'config-manager-jdbc'
+
+include 'config-manager-properties'
+project(':config-manager-properties').name = 'config-manager-properties'
+
+include 'config-manager-reload'
+project(':config-manager-reload').name = 'config-manager-reload'
 
 include 'spring-config-manager-starter'
 project(':spring-config-manager-starter').name = 'spring-config-manager-starter'
