@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: 'jdbc:h2:mem:testdb;MODE=Oracle'
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+config-manager:
+  enabled: true
+  source: jdbc
+  auto-reload: true
+  reload-trigger: periodical
+  reload-period-in-milliseconds: 60000
+  value-column-length: 90000000
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: 'jdbc:h2:mem:testdb;MODE=Oracle'
+    username: sa
+    password: password
+    hikari:
+      poolName: config-manager-db-pool
+      maximum-pool-size: 1
+      minimum-idle: 1
+  sql:
+    insert: INSERT INTO APP_SETTINGS (APPLICATION, PROFILE, LABEL, KEY, VALUE) VALUES ('application', 'dev', 'master', ?, ?)
+    select: SELECT KEY, VALUE FROM APP_SETTINGS
+    update: UPDATE APP_SETTINGS SET VALUE = ? WHERE KEY = ?
+    delete-by-prefix: DELETE FROM APP_SETTINGS WHERE KEY LIKE CONCAT(:prefix, '.%')
