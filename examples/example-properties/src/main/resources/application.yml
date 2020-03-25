@@ -1,0 +1,6 @@
+config-manager:
+  enabled: true
+  property-files: classpath:settings.properties
+  auto-reload: true
+  reload-trigger: periodical
+  reload-period-in-milliseconds: 60000

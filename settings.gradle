@@ -12,8 +12,14 @@ project(':config-manager-properties').name = 'config-manager-properties'
 include 'config-manager-reload'
 project(':config-manager-reload').name = 'config-manager-reload'
 
-include 'spring-config-manager-starter'
-project(':spring-config-manager-starter').name = 'spring-config-manager-starter'
+include 'spring-config-manager-starter-jdbc'
+project(':spring-config-manager-starter-jdbc').projectDir = new File('starter/spring-config-manager-starter-jdbc')
 
-include 'example'
-project(':example').name = 'config-manager-example'
+include 'spring-config-manager-starter-properties'
+project(':spring-config-manager-starter-properties').projectDir = new File('starter/spring-config-manager-starter-properties')
+
+include 'example-jdbc'
+project(':example-jdbc').projectDir = new File('examples/example-jdbc')
+
+include 'example-properties'
+project(':example-properties').projectDir = new File('examples/example-properties')
