@@ -19,22 +19,11 @@ configurations {
     }
 }
 
-compileJava.dependsOn(processResources)
-
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter:2.1.7.RELEASE'
-    implementation 'org.springframework.boot:spring-boot-autoconfigure:2.1.7.RELEASE'
-    implementation 'org.springframework.boot:spring-boot:2.1.7.RELEASE'
-    implementation 'org.springframework:spring-jdbc:5.2.2.RELEASE'
-    implementation 'org.springframework:spring-tx:5.2.2.RELEASE'
-    implementation 'com.zaxxer:HikariCP:3.3.1'
+    api project(':config-manager-api')
 
-    compileOnly 'org.projectlombok:lombok:1.18.8'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.1.7.RELEASE'
-    annotationProcessor 'org.projectlombok:lombok:1.18.8'
-
-    api 'com.inomera.telco.commons:config-manager:1.0.2'
-    api 'com.inomera.telco.commons:lock-provider:1.2.0'
+    implementation 'org.springframework:spring-jdbc:4.3.9.RELEASE'
+    implementation 'com.inomera.telco.commons:lock-provider:1.2.0'
 
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.2.0')
     testCompile('org.junit.jupiter:junit-jupiter-params:5.2.0')
