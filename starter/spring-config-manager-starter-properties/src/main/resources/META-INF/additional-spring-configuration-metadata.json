@@ -1,0 +1,57 @@
+{
+  "groups": [
+    {
+      "name": "config-manager",
+      "type": "com.inomera.telco.commons.springconfigmanagerstarter.ConfigManagerProperties",
+      "sourceType": "com.inomera.telco.commons.springconfigmanagerstarter.ConfigManagerProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "config-manager.source",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Use one of jdbc and properties values."
+    },
+    {
+      "name": "config-manager.auto-reload",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Set true if you need reloading properties automatically."
+    },
+    {
+      "name": "config-manager.reload-trigger",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Set one of `cron` or `periodical` values."
+    }
+  ],
+  "hints": [
+    {
+      "name": "config-manager.source",
+      "values": [
+        {
+          "value": "jdbc",
+          "description": "Uses JDBC as property source."
+        },
+        {
+          "value": "properties",
+          "description": "Uses specified property files as property sources."
+        }
+      ]
+    },
+    {
+      "name": "config-manager.reload-trigger",
+      "values": [
+        {
+          "value": "cron",
+          "description": "Uses cron expression as trigger to reload properties."
+        },
+        {
+          "value": "periodical",
+          "description": "Uses fixed period as trigger to reload properties."
+        }
+      ]
+    }
+  ]
+}
