@@ -61,4 +61,4 @@ git push
 git push --tags
 
 # publish it
-../gradlew :config-manager:publish
+../gradlew :config-manager-api:publish
