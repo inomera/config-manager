@@ -12,6 +12,9 @@ project(':config-manager-properties').name = 'config-manager-properties'
 include 'config-manager-reload'
 project(':config-manager-reload').name = 'config-manager-reload'
 
+include 'config-manager-mongo'
+project(':config-manager-mongo').name = 'config-manager-mongo'
+
 include 'spring-config-manager-starter-jdbc'
 project(':spring-config-manager-starter-jdbc').projectDir = new File('starter/spring-config-manager-starter-jdbc')
 
