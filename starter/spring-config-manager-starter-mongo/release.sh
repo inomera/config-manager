@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-TAG_PREFIX="starter-jdbc"
+TAG_PREFIX="starter-mongo"
 
 # ensure we're up to date
 git pull

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -21,6 +22,7 @@ public class MongoDBConfigurationProperties {
     private String collection;
     private String keyFieldName;
     private String valueFieldName;
+    private Map<String, Object> query;
 
     @Getter
     @Setter
