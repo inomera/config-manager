@@ -1,7 +1,7 @@
 package com.inomera.telco.commons.config.dao;
 
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
 import org.bson.Document;
 
 import java.util.HashMap;
@@ -17,9 +17,9 @@ public class MongoConfigurationDao implements NoSqlConfigurationDao {
     private final String collectionName;
     private final String keyFieldName;
     private final String valueFieldName;
-    private final Map<String, Object> query;
+    private final Document query;
 
-    public MongoConfigurationDao(MongoClient mongoClient, String dbName, String collectionName, String keyFieldName, String valueFieldName, Map<String, Object> query) {
+    public MongoConfigurationDao(MongoClient mongoClient, String dbName, String collectionName, String keyFieldName, String valueFieldName, Document query) {
         this.mongoClient = mongoClient;
         this.dbName = dbName;
         this.collectionName = collectionName;
@@ -30,15 +30,14 @@ public class MongoConfigurationDao implements NoSqlConfigurationDao {
 
     @Override
     public Map<String, String> findAllConfigurations() {
-        final Document queryDocument = new Document(query);
-        final FindIterable<Document> documents = mongoClient.getDatabase(dbName).getCollection(collectionName).find(queryDocument);
+        final FindIterable<Document> documents = mongoClient.getDatabase(dbName).getCollection(collectionName).find(query);
         Map<String, String> configurationMap = new HashMap<>();
         for (Document document : documents) {
             final String key = document.containsKey(keyFieldName) ? String.valueOf(document.get(keyFieldName)) : null;
             final String value = document.containsKey(valueFieldName) ? String.valueOf(document.get(valueFieldName)) : null;
 
-            if (key != null && value != null){
-                configurationMap.put(key,value);
+            if (key != null && value != null) {
+                configurationMap.put(key, value);
             }
         }
         return configurationMap;
