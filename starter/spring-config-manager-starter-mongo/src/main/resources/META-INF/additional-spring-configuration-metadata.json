@@ -1,0 +1,32 @@
+{
+  "groups": [
+    {
+      "name": "config-manager",
+      "type": "com.inomera.telco.commons.springconfigmanagerstarter.MongoDBConfigurationProperties",
+      "sourceType": "com.inomera.telco.commons.springconfigmanagerstarter.MongoDBConfigurationProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "config-manager.source",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Use one of jdbc and properties values."
+    }
+  ],
+  "hints": [
+    {
+      "name": "config-manager.source",
+      "values": [
+        {
+          "value": "jdbc",
+          "description": "Uses JDBC as property source."
+        },
+        {
+          "value": "properties",
+          "description": "Uses specified property files as property sources."
+        }
+      ]
+    }
+  ]
+}

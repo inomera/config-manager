@@ -44,7 +44,7 @@ class MongoConfigurationDaoTest {
         query.put("two", '2');
         query.put("three", '3');
         mongoConfigurationDao = new MongoConfigurationDao(mongoClient, "testDB", "testCollection",
-                "key", "value", query);
+                "key", "value", new Document(query));
     }
 
     @Test
