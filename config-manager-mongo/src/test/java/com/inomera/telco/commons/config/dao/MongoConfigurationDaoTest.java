@@ -5,6 +5,7 @@ import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +13,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Melek UZUN
@@ -40,16 +40,16 @@ class MongoConfigurationDaoTest {
         findIterable = mock(FindIterable.class);
         mongoCursor = mock(MongoCursor.class);
         Map<String, Object> query = new HashMap<>();
-        query.put("one", '1');
-        query.put("two", '2');
-        query.put("three", '3');
+        query.put("application", "application");
+        query.put("profile", "default");
+        query.put("label", "master");
         mongoConfigurationDao = new MongoConfigurationDao(mongoClient, "testDB", "testCollection",
                 "key", "value", new Document(query));
     }
 
     @Test
     @DisplayName("Should fetch all configurations")
-    void shouldFetchAllConfigurations(){
+    void shouldFetchAllConfigurations() {
         when(mongoClient.getDatabase(anyString())).thenReturn(mongoDatabase);
         when(mongoDatabase.getCollection(anyString())).thenReturn(testCollection);
         when(testCollection.find(any(Document.class))).thenReturn(findIterable);
@@ -59,20 +59,52 @@ class MongoConfigurationDaoTest {
         Document setting1 = new Document();
         Document setting2 = new Document();
         Document setting3 = new Document();
-        setting1.put("key","one");
-        setting1.put("value","1");
-        setting2.put("key", "two");
-        setting2.put("value", "2");
-        setting3.put("key", "three");
-        setting3.put("value", "3");
+        setting1.put("key", "application");
+        setting1.put("value", "application");
+        setting2.put("key", "profile");
+        setting2.put("value", "default");
+        setting3.put("key", "label");
+        setting3.put("value", "master");
 
         when(mongoCursor.next()).thenReturn(setting1).thenReturn(setting2).thenReturn(setting3);
         final Map<String, String> allConfigurations = mongoConfigurationDao.findAllConfigurations();
 
         assertEquals(3, allConfigurations.size());
-        assertEquals("1", allConfigurations.get("one"));
-        assertEquals("2", allConfigurations.get("two"));
-        assertEquals("3", allConfigurations.get("three"));
+        assertEquals("application", allConfigurations.get("application"));
+        assertEquals("default", allConfigurations.get("profile"));
+        assertEquals("master", allConfigurations.get("label"));
     }
 
+    @Test
+    @DisplayName("shouldFindUsingUserProvidedQuery")
+    void shouldFindUsingUserProvidedQuery() {
+        when(mongoClient.getDatabase(anyString())).thenReturn(mongoDatabase);
+        when(mongoDatabase.getCollection(anyString())).thenReturn(testCollection);
+        when(testCollection.find(any(Document.class))).thenReturn(findIterable);
+        when(findIterable.iterator()).thenReturn(mongoCursor);
+        when(mongoCursor.hasNext()).thenReturn(true).thenReturn(true).thenReturn(true).thenReturn(false);
+
+        ArgumentCaptor<Document> captor = ArgumentCaptor.forClass(Document.class);
+
+        Document setting1 = new Document();
+        Document setting2 = new Document();
+        Document setting3 = new Document();
+        setting1.put("key", "application");
+        setting1.put("value", "application");
+        setting2.put("key", "profile");
+        setting2.put("value", "default");
+        setting3.put("key", "label");
+        setting3.put("value", "master");
+
+        when(mongoCursor.next()).thenReturn(setting1).thenReturn(setting2).thenReturn(setting3);
+        mongoConfigurationDao.findAllConfigurations();
+
+        verify(testCollection, times(1)).find(captor.capture());
+
+        final Document actual = captor.getValue();
+        assertEquals(3, actual.size());
+        assertEquals("application", actual.get("application"));
+        assertEquals("default", actual.get("profile"));
+        assertEquals("master", actual.get("label"));
+    }
 }

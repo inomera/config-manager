@@ -21,10 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class NoSqlConfigurationFetcherServiceTest {
 
     @InjectMocks
-    NoSqlConfigurationFetcherService noSqlConfigurationFetcherService;
+    private NoSqlConfigurationFetcherService noSqlConfigurationFetcherService;
 
     @Mock
-    NoSqlConfigurationDao noSqlConfigurationDao;
+    private NoSqlConfigurationDao noSqlConfigurationDao;
 
     @Test
     @DisplayName("Should return all configuration coming from NoSqlConfigurationDAO")

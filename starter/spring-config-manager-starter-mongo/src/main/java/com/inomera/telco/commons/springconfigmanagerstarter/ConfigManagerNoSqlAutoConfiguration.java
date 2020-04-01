@@ -10,9 +10,6 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.bson.Document;
-import org.bson.codecs.Codec;
-import org.bson.codecs.configuration.CodecRegistries;
-import org.bson.codecs.configuration.CodecRegistry;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -21,12 +18,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import static com.mongodb.MongoClient.getDefaultCodecRegistry;
 
 /**
  * @author Melek UZUN
@@ -39,22 +32,17 @@ public class ConfigManagerNoSqlAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ConfigurationHolder configurationHolder(@Qualifier("configurationFetcherService") ConfigurationFetcherService configurationFetcherService) {
+    public ConfigurationHolder configurationHolder(
+            @Qualifier("configurationFetcherService") ConfigurationFetcherService configurationFetcherService) {
         return new ConcurrentHashMapConfigurationHolder(configurationFetcherService);
     }
 
-    private CodecRegistry getCodecRegistry() {
-        final List<Codec<?>> codecList = new ArrayList<>();
-        return CodecRegistries.fromRegistries(getDefaultCodecRegistry(), CodecRegistries.fromCodecs(codecList));
-    }
-
-    @Bean(name = "configManagerMongoDB")
-    @ConditionalOnMissingBean(name = "configManagerMongoDB")
+    @Bean(name = "configManagerMongoClient")
+    @ConditionalOnMissingBean(name = "configManagerMongoClient")
     public MongoClient mongoClient() {
         final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
                 .applyToClusterSettings(builder -> builder.hosts(mongoDBConfigurationProperties().getServerAddressList()))
                 .applyToSslSettings(mongoDBConfigurationProperties().getSslSettings())
-                .codecRegistry(getCodecRegistry())
                 .build();
         return MongoClients.create(mongoClientSettings);
     }
@@ -67,9 +55,11 @@ public class ConfigManagerNoSqlAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public MongoConfigurationDao noSqlConfigurationDao() {
+    public MongoConfigurationDao noSqlConfigurationDao(
+            @Qualifier("configManagerMongoClient") MongoClient mongoClient
+    ) {
         Map<String, Object> query = new HashMap<>();
-        return new MongoConfigurationDao(mongoClient(), mongoDBConfigurationProperties().getDbName(),
+        return new MongoConfigurationDao(mongoClient, mongoDBConfigurationProperties().getDbName(),
                 mongoDBConfigurationProperties().getCollection(), mongoDBConfigurationProperties().getKeyFieldName(),
                 mongoDBConfigurationProperties().getValueFieldName(), new Document(query));
     }
