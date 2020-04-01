@@ -58,10 +58,10 @@ public class ConfigManagerNoSqlAutoConfiguration {
     public MongoConfigurationDao noSqlConfigurationDao(
             @Qualifier("configManagerMongoClient") MongoClient mongoClient
     ) {
-        Map<String, Object> query = new HashMap<>();
-        return new MongoConfigurationDao(mongoClient, mongoDBConfigurationProperties().getDbName(),
-                mongoDBConfigurationProperties().getCollection(), mongoDBConfigurationProperties().getKeyFieldName(),
-                mongoDBConfigurationProperties().getValueFieldName(), new Document(query));
+        final MongoDBConfigurationProperties mongoDBConfigurationProperties = mongoDBConfigurationProperties();
+        return new MongoConfigurationDao(mongoClient, mongoDBConfigurationProperties.getDbName(),
+                mongoDBConfigurationProperties.getCollection(), mongoDBConfigurationProperties.getKeyFieldName(),
+                mongoDBConfigurationProperties.getValueFieldName(), new Document(mongoDBConfigurationProperties.getQuery()));
     }
 
     @Bean
