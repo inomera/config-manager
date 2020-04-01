@@ -70,3 +70,12 @@ db.testCollection.insertOne(
         "value" : "fourth-value-3"
     }
 );
+
+db.testCollection.insertOne(
+    { "application" : "application",
+        "profile" : "default",
+        "label" : "master",
+        "key" : "first-key",
+        "value" : "third-value"
+    }
+);
