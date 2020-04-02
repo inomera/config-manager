@@ -4,15 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Serdar Kuzucu
  */
 @Getter
 @Setter
-@SuppressWarnings("WeakerAccess")
 @ConfigurationProperties(prefix = "config-manager")
 public class ConfigManagerProperties {
     private static final String DEFAULT_SELECT_SQL = "SELECT SETTING_NAME, SETTING_VALUE FROM APP_SETTINGS";

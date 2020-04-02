@@ -31,7 +31,7 @@ public class MongoConfigurationDao implements NoSqlConfigurationDao {
     @Override
     public Map<String, String> findAllConfigurations() {
         final FindIterable<Document> documents = mongoClient.getDatabase(dbName).getCollection(collectionName).find(query);
-        Map<String, String> configurationMap = new HashMap<>();
+        final Map<String, String> configurationMap = new HashMap<>();
         for (Document document : documents) {
             final String key = document.containsKey(keyFieldName) ? String.valueOf(document.get(keyFieldName)) : null;
             final String value = document.containsKey(valueFieldName) ? String.valueOf(document.get(valueFieldName)) : null;
