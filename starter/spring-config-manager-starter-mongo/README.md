@@ -16,3 +16,27 @@ config-manager:
     dbName: testDB
     collection: testCollection
 ```
+
+#### Auto-Reload Periodically
+
+```yaml
+config-manager:
+  enabled: true
+  source: mongo
+
+  auto-reload: true
+  reload-trigger: periodical
+  reload-period-in-milliseconds: 60000
+```
+
+#### Auto-Reload with Cron Expression
+
+```yaml
+config-manager:
+  enabled: true
+  source: mongo
+
+  auto-reload: true
+  reload-trigger: cron
+  reload-cron-expression: 0/10 * * * * ?
+```
