@@ -3,7 +3,6 @@
 ```yaml
 config-manager:
   enabled: true
-  source: jdbc
   value-column-length: 255
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
@@ -21,23 +20,12 @@ config-manager:
     delete-by-prefix: DELETE FROM APP_SETTINGS WHERE SETTING_KEY LIKE CONCAT(:prefix, '.%')
 ```
 
-#### Property Files as Configuration Sources
-
-```yaml
-config-manager:
-  enabled: true
-  source: properties
-  property-files: classpath:settings.properties,file:///tmp/settings.properties
-```
-
 #### Auto-Reload Periodically
 
 ```yaml
 config-manager:
   enabled: true
-  source: properties
-  property-files: classpath:settings.properties,file:///tmp/settings.properties
-
+  # ... Other configurations above
   auto-reload: true
   reload-trigger: periodical
   reload-period-in-milliseconds: 60000
@@ -48,9 +36,7 @@ config-manager:
 ```yaml
 config-manager:
   enabled: true
-  source: properties
-  property-files: classpath:settings.properties,file:///tmp/settings.properties
-
+  # ... Other configurations above
   auto-reload: true
   reload-trigger: cron
   reload-cron-expression: 0/10 * * * * ?

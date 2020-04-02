@@ -1,5 +1,4 @@
 config-manager:
-  source: mongo
   enabled: true
   auto-reload: true
   reload-trigger: periodical
