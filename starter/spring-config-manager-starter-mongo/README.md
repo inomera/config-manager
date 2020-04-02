@@ -22,8 +22,6 @@ config-manager:
 ```yaml
 config-manager:
   enabled: true
-  source: mongo
-
   auto-reload: true
   reload-trigger: periodical
   reload-period-in-milliseconds: 60000
@@ -34,8 +32,6 @@ config-manager:
 ```yaml
 config-manager:
   enabled: true
-  source: mongo
-
   auto-reload: true
   reload-trigger: cron
   reload-cron-expression: 0/10 * * * * ?
