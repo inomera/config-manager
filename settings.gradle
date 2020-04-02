@@ -12,14 +12,23 @@ project(':config-manager-properties').name = 'config-manager-properties'
 include 'config-manager-reload'
 project(':config-manager-reload').name = 'config-manager-reload'
 
+include 'config-manager-mongo'
+project(':config-manager-mongo').name = 'config-manager-mongo'
+
 include 'spring-config-manager-starter-jdbc'
 project(':spring-config-manager-starter-jdbc').projectDir = new File('starter/spring-config-manager-starter-jdbc')
 
 include 'spring-config-manager-starter-properties'
 project(':spring-config-manager-starter-properties').projectDir = new File('starter/spring-config-manager-starter-properties')
 
+include 'spring-config-manager-starter-mongo'
+project(':spring-config-manager-starter-mongo').projectDir = new File('starter/spring-config-manager-starter-mongo')
+
 include 'example-jdbc'
 project(':example-jdbc').projectDir = new File('examples/example-jdbc')
 
 include 'example-properties'
 project(':example-properties').projectDir = new File('examples/example-properties')
+
+include 'example-nosql'
+project(':example-nosql').projectDir = new File('examples/example-nosql')

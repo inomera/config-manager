@@ -1,0 +1,20 @@
+config-manager:
+  source: mongo
+  enabled: true
+  auto-reload: true
+  reload-trigger: periodical
+  reload-period-in-milliseconds: 60000
+  mongo:
+    servers:
+      - host: 127.0.0.1
+        port: 27017
+    query:
+      application: application
+      label: master
+      profile: default
+    keyFieldName: key
+    valueFieldName: value
+    dbName: testDB
+    collection: testCollection
+
+
