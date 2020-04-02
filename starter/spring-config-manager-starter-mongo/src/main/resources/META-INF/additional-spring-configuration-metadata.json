@@ -8,12 +8,6 @@
   ],
   "properties": [
     {
-      "name": "config-manager.source",
-      "type": "java.lang.String",
-      "defaultValue": null,
-      "description": "Use one of mongoDB and properties values."
-    },
-    {
       "name": "config-manager.mongo.servers",
       "type": "java.util.List",
       "defaultValue": false,
@@ -48,21 +42,6 @@
       "type": "java.lang.String",
       "defaultValue": false,
       "description": "Set name of the mongoDB collection which holds the configuration."
-    }
-  ],
-  "hints": [
-    {
-      "name": "config-manager.source",
-      "values": [
-        {
-          "value": "mongo",
-          "description": "Uses mongoDB as property source."
-        },
-        {
-          "value": "properties",
-          "description": "Uses specified property files as property sources."
-        }
-      ]
     }
   ]
 }
