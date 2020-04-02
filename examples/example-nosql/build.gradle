@@ -26,7 +26,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     implementation project(':spring-config-manager-starter-mongo')
-    implementation project('com.inomera.telco.commons:config-manager:1.0.2')
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
