@@ -15,6 +15,9 @@ project(':config-manager-reload').name = 'config-manager-reload'
 include 'config-manager-mongo'
 project(':config-manager-mongo').name = 'config-manager-mongo'
 
+include 'config-manager-cassandra'
+project(':config-manager-cassandra').name = 'config-manager-cassandra'
+
 include 'spring-config-manager-starter-jdbc'
 project(':spring-config-manager-starter-jdbc').projectDir = new File('starter/spring-config-manager-starter-jdbc')
 
@@ -24,6 +27,9 @@ project(':spring-config-manager-starter-properties').projectDir = new File('star
 include 'spring-config-manager-starter-mongo'
 project(':spring-config-manager-starter-mongo').projectDir = new File('starter/spring-config-manager-starter-mongo')
 
+include 'spring-config-manager-starter-cassandra'
+project(':spring-config-manager-starter-cassandra').projectDir = new File('starter/spring-config-manager-starter-cassandra')
+
 include 'example-jdbc'
 project(':example-jdbc').projectDir = new File('examples/example-jdbc')
 
@@ -32,3 +38,6 @@ project(':example-properties').projectDir = new File('examples/example-propertie
 
 include 'example-nosql'
 project(':example-nosql').projectDir = new File('examples/example-nosql')
+
+include 'example-cassandra'
+project(':example-cassandra').projectDir = new File('examples/example-cassandra')
