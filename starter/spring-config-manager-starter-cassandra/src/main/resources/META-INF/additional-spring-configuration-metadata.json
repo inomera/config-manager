@@ -1,0 +1,40 @@
+{
+  "groups": [
+    {
+      "name": "config-manager",
+      "type": "com.inomera.telco.commons.springconfigmanagerstarter.ConfigManagerProperties",
+      "sourceType": "com.inomera.telco.commons.springconfigmanagerstarter.ConfigManagerProperties"
+    },
+    {
+      "name": "cassandra",
+      "type": "com.inomera.telco.commons.springconfigmanagerstarter.CassandraConfigurationProperties",
+      "sourceType": "com.inomera.telco.commons.springconfigmanagerstarter.CassandraConfigurationProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "cassandra.transaction.nodes",
+      "type": "java.util.Set",
+      "defaultValue": false,
+      "description": "Set host and port fields of Cassandra Cluster which are required to connect."
+    },
+    {
+      "name": "config-manager.transaction.keyspace",
+      "type": "java.lang.String",
+      "defaultValue": false,
+      "description": "Set keyspace field to specify which keyspace to be used."
+    },
+    {
+      "name": "config-manager.transaction.schema",
+      "type": "java.lang.String",
+      "defaultValue": false,
+      "description": "Set keyspace schema design."
+    },
+    {
+      "name": "config-manager.transaction.sql",
+      "type": "java.lang.String",
+      "defaultValue": false,
+      "description": "Set sql fields like “select” to create template queries or commands."
+    }
+  ]
+}
