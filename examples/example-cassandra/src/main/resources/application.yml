@@ -1,0 +1,15 @@
+config-manager:
+  enabled: true
+  auto-reload: true
+  reload-trigger: periodical
+  reload-period-in-milliseconds: 60000
+
+cassandra:
+  transaction:
+    nodes:
+      - host: localhost
+        port: 9042
+    keyspace: mps
+    schema: create_if_not_exists
+    sql:
+      select: select key, value from mps.app_settings where application = ?
