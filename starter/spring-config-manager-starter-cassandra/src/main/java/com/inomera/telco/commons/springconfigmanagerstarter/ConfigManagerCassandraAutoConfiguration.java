@@ -106,7 +106,7 @@ public class ConfigManagerCassandraAutoConfiguration {
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "cassandra.transaction")
+    @ConfigurationProperties(prefix = "config-manager.cassandra")
     public CassandraConfigurationProperties cassandraConfigurationProperties() {
         return new CassandraConfigurationProperties();
     }
