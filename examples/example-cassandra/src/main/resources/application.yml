@@ -3,9 +3,7 @@ config-manager:
   auto-reload: true
   reload-trigger: periodical
   reload-period-in-milliseconds: 60000
-
-cassandra:
-  transaction:
+  cassandra:
     nodes:
       - host: localhost
         port: 9042
