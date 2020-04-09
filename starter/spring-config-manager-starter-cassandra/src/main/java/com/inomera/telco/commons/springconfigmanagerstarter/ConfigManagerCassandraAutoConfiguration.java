@@ -12,8 +12,6 @@ import com.inomera.telco.commons.config.reload.ConfigurationHolderReLoader;
 import com.inomera.telco.commons.config.reload.ScheduledConfigurationHolderReLoader;
 import com.inomera.telco.commons.config.service.CassandraConfigurationFetcherService;
 import com.inomera.telco.commons.config.service.ConfigurationFetcherService;
-import com.inomera.telco.commons.lock.LockProvider;
-import com.inomera.telco.commons.lock.reentrant.LocalReentrantLockProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,12 +49,6 @@ public class ConfigManagerCassandraAutoConfiguration {
 
     @Autowired
     private ConfigManagerProperties configManagerProperties;
-
-    @Bean
-    @ConditionalOnMissingBean
-    public LockProvider lockProvider() {
-        return new LocalReentrantLockProvider();
-    }
 
     @Bean()
     @ConditionalOnMissingBean()
@@ -162,11 +154,11 @@ public class ConfigManagerCassandraAutoConfiguration {
         cassandraNodes.forEach(cassandraNode -> {
             String host = cassandraNode.getHost();
             if (StringUtils.isBlank(host)) {
-                return;
+                throw new IllegalArgumentException("Please set environment host property to connect to cassandra.");
             }
             Integer port = cassandraNode.getPort();
             if (port == null) {
-                return;
+                throw new IllegalArgumentException("Please set environment port property to connect to cassandra.");
             }
             contactAddresses.add(new InetSocketAddress(host, port));
         });
