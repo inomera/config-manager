@@ -19,21 +19,18 @@ public class CassandraConfigurationDaoImpl implements CassandraConfigurationDao 
 
     private final Session session;
 
-    private final String application;
-
     private PreparedStatement selectByAppStatement;
 
 
-    public CassandraConfigurationDaoImpl(Session session, String selectSql, String application) {
+    public CassandraConfigurationDaoImpl(Session session, String selectSql) {
         this.session = session;
         this.selectSql = selectSql;
-        this.application = application;
         this.selectByAppStatement = session.prepare(selectSql);
     }
 
     @Override
     public Map<String, String> findAllConfigurations() {
-        final BoundStatement boundStatement = selectByAppStatement.bind(application);
+        final BoundStatement boundStatement = selectByAppStatement.bind();
         final ResultSet resultSet = session.execute(boundStatement);
         return resultSet.all().stream().collect(Collectors.toMap(row -> row.getString(0), row -> row.getString(1),
                 (firstValue, secondValue) -> secondValue));
