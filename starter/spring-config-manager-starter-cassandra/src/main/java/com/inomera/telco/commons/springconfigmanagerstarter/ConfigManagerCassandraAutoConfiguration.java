@@ -93,7 +93,7 @@ public class ConfigManagerCassandraAutoConfiguration {
             @Qualifier("cassandraSession") Session session
     ) {
         final CassandraConfigurationProperties.SqlStatements sql = cassandraConfigurationProperties().getSql();
-        return new CassandraConfigurationDaoImpl(session, sql.getSelect(), "application");
+        return new CassandraConfigurationDaoImpl(session, sql.getSelect());
     }
 
 
