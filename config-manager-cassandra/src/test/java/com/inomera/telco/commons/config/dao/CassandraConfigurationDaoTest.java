@@ -27,7 +27,7 @@ class CassandraConfigurationDaoTest {
 
     private ResultSet resultSet;
 
-    private static final String SELECT = "select key, value from mps.app_settings where application = ?";
+    private static final String SELECT = "select key, value from mps.app_settings where application = 'application'";
 
     @BeforeEach
     void initialize() {
@@ -37,13 +37,13 @@ class CassandraConfigurationDaoTest {
         resultSet = mock(ResultSet.class);
 
         when(session.prepare(anyString())).thenReturn(preparedStatement);
-        cassandraConfigurationDao = new CassandraConfigurationDaoImpl(session, SELECT, "application");
+        cassandraConfigurationDao = new CassandraConfigurationDaoImpl(session, SELECT);
     }
 
     @Test
     @DisplayName("Should fetch all configurations")
     void shouldFetchAllConfigurations() {
-        when(preparedStatement.bind(anyString())).thenReturn(boundStatement);
+        when(preparedStatement.bind()).thenReturn(boundStatement);
         List<Row> rows = new ArrayList<>();
         rows.add(mockRow("key"));
         rows.add(mockRow("value"));
