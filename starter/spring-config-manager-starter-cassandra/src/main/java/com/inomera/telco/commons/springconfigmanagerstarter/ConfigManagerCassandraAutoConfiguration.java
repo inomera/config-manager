@@ -44,6 +44,12 @@ import static com.google.common.collect.Lists.newArrayList;
 @ConditionalOnProperty(value = "config-manager.enabled")
 @EnableConfigurationProperties(value = ConfigManagerProperties.class)
 public class ConfigManagerCassandraAutoConfiguration {
+    public static final String BEAN_CASSANDRA_CLUSTER = "config-manager.cassandra-cluster";
+    public static final String BEAN_CASSANDRA_SESSION = "config-manager.cassandra-session";
+    public static final String BEAN_CASSANDRA_CONFIG_PROPERTIES = "config-manager.cassandra-configuration-properties";
+    public static final String BEAN_CASSANDRA_CONFIG_DAO = "config-manager.cassandra-dao";
+    public static final String BEAN_CASSANDRA_CONFIG_FETCHER_SERVICE = "config-manager.cassandra-config-fetcher-service";
+
     private static final Logger LOG = LoggerFactory.getLogger(ConfigManagerCassandraAutoConfiguration.class);
 
     @Autowired
@@ -52,7 +58,7 @@ public class ConfigManagerCassandraAutoConfiguration {
     @Bean()
     @ConditionalOnMissingBean()
     public ConfigurationHolder configurationHolder(
-            @Qualifier("configurationFetcherService") ConfigurationFetcherService configurationFetcherService) {
+            @Qualifier(BEAN_CASSANDRA_CONFIG_FETCHER_SERVICE) ConfigurationFetcherService configurationFetcherService) {
         return new ConcurrentHashMapConfigurationHolder(configurationFetcherService);
     }
 
@@ -86,32 +92,32 @@ public class ConfigManagerCassandraAutoConfiguration {
         return new PeriodicTrigger(configManagerProperties.getReloadPeriodInMilliseconds());
     }
 
-    @Bean
-    @ConditionalOnMissingBean
+    @Bean(name = BEAN_CASSANDRA_CONFIG_DAO)
+    @ConditionalOnMissingBean(name = BEAN_CASSANDRA_CONFIG_DAO)
     public CassandraConfigurationDao configurationDao(
-            @Qualifier("configManagerCassandraSession") Session session
+            @Qualifier(BEAN_CASSANDRA_SESSION) Session session
     ) {
-        final CassandraConfigurationProperties.SqlStatements sql = cassandraConfigurationProperties().getSql();
+        final ConfigManagerCassandraConfigurationProperties.SqlStatements sql = cassandraConfigurationProperties().getSql();
         return new CassandraConfigurationDaoImpl(session, sql.getSelect());
     }
 
 
-    @Bean
-    @ConditionalOnMissingBean
+    @Bean(name = BEAN_CASSANDRA_CONFIG_FETCHER_SERVICE)
+    @ConditionalOnMissingBean(name = BEAN_CASSANDRA_CONFIG_FETCHER_SERVICE)
     public ConfigurationFetcherService configurationFetcherService(
-            CassandraConfigurationDao cassandraConfigurationDao
+            @Qualifier(value = BEAN_CASSANDRA_CONFIG_DAO) CassandraConfigurationDao cassandraConfigurationDao
     ) {
         return new CassandraConfigurationFetcherService(cassandraConfigurationDao);
     }
 
-    @Bean
+    @Bean(name = BEAN_CASSANDRA_CONFIG_PROPERTIES)
     @ConfigurationProperties(prefix = "config-manager.cassandra")
-    public CassandraConfigurationProperties cassandraConfigurationProperties() {
-        return new CassandraConfigurationProperties();
+    public ConfigManagerCassandraConfigurationProperties cassandraConfigurationProperties() {
+        return new ConfigManagerCassandraConfigurationProperties();
     }
 
-    @Bean(name = "configManagerCassandraCluster", destroyMethod = "close")
-    @ConditionalOnMissingBean(name = "configManagerCassandraCluster")
+    @Bean(name = BEAN_CASSANDRA_CLUSTER, destroyMethod = "close")
+    @ConditionalOnMissingBean(name = BEAN_CASSANDRA_CLUSTER)
     public Cluster cassandraCluster() {
         final Collection<InetSocketAddress> cassandraContactPoints = getCassandraContactPoints();
 
@@ -123,9 +129,9 @@ public class ConfigManagerCassandraAutoConfiguration {
                 .build();
     }
 
-    @Bean(value = "configManagerCassandraSession", destroyMethod = "close")
-    @ConditionalOnMissingBean(name = "configManagerCassandraSession")
-    public Session cassandraSession(@Qualifier("configManagerCassandraCluster") Cluster cluster) {
+    @Bean(value = BEAN_CASSANDRA_SESSION, destroyMethod = "close")
+    @ConditionalOnMissingBean(name = BEAN_CASSANDRA_SESSION)
+    public Session cassandraSession(@Qualifier(BEAN_CASSANDRA_CLUSTER) Cluster cluster) {
         return cluster.connect();
     }
 
@@ -139,7 +145,7 @@ public class ConfigManagerCassandraAutoConfiguration {
         return cassandraNodes;
     }
 
-    private static List<InetSocketAddress> toInetSocketAddresses(Set<CassandraConfigurationProperties.CassandraNode> cassandraNodes) {
+    private static List<InetSocketAddress> toInetSocketAddresses(Set<ConfigManagerCassandraConfigurationProperties.CassandraNode> cassandraNodes) {
         List<InetSocketAddress> contactAddresses = newArrayList();
         cassandraNodes.forEach(cassandraNode -> {
             String host = cassandraNode.getHost();
