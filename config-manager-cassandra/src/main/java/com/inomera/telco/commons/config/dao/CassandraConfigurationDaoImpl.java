@@ -14,17 +14,12 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 public class CassandraConfigurationDaoImpl implements CassandraConfigurationDao {
-
-    private final String selectSql;
-
     private final Session session;
-
-    private PreparedStatement selectByAppStatement;
+    private final PreparedStatement selectByAppStatement;
 
 
     public CassandraConfigurationDaoImpl(Session session, String selectSql) {
         this.session = session;
-        this.selectSql = selectSql;
         this.selectByAppStatement = session.prepare(selectSql);
     }
 

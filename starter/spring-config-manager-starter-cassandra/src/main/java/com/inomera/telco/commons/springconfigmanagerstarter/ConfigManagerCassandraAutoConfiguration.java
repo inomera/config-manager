@@ -3,7 +3,6 @@ package com.inomera.telco.commons.springconfigmanagerstarter;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.CodecRegistry;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.mapping.MappingManager;
 import com.inomera.telco.commons.config.ConcurrentHashMapConfigurationHolder;
 import com.inomera.telco.commons.config.ConfigurationHolder;
 import com.inomera.telco.commons.config.dao.CassandraConfigurationDao;
@@ -90,7 +89,7 @@ public class ConfigManagerCassandraAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public CassandraConfigurationDao configurationDao(
-            @Qualifier("cassandraSession") Session session
+            @Qualifier("configManagerCassandraSession") Session session
     ) {
         final CassandraConfigurationProperties.SqlStatements sql = cassandraConfigurationProperties().getSql();
         return new CassandraConfigurationDaoImpl(session, sql.getSelect());
@@ -111,32 +110,23 @@ public class ConfigManagerCassandraAutoConfiguration {
         return new CassandraConfigurationProperties();
     }
 
-    @Bean
-    public Cluster cassandraCluster(CodecRegistry codecRegistry) {
+    @Bean(name = "configManagerCassandraCluster", destroyMethod = "close")
+    @ConditionalOnMissingBean(name = "configManagerCassandraCluster")
+    public Cluster cassandraCluster() {
         final Collection<InetSocketAddress> cassandraContactPoints = getCassandraContactPoints();
 
         return Cluster.builder()
                 .withoutMetrics()
                 .withoutJMXReporting()
                 .addContactPointsWithPorts(cassandraContactPoints)
-                .withCodecRegistry(codecRegistry)
+                .withCodecRegistry(CodecRegistry.DEFAULT_INSTANCE)
                 .build();
     }
 
-    @Bean
-    public CodecRegistry codecRegistry() {
-        return CodecRegistry.DEFAULT_INSTANCE;
-    }
-
-    @Bean("cassandraSession")
-    @ConditionalOnMissingBean(name = "cassandraSession")
-    public Session cassandraSession(Cluster cluster) {
+    @Bean(value = "configManagerCassandraSession", destroyMethod = "close")
+    @ConditionalOnMissingBean(name = "configManagerCassandraSession")
+    public Session cassandraSession(@Qualifier("configManagerCassandraCluster") Cluster cluster) {
         return cluster.connect();
-    }
-
-    @Bean
-    public MappingManager mappingManager(Session session) {
-        return new MappingManager(session);
     }
 
     private Collection<InetSocketAddress> getCassandraContactPoints() {
