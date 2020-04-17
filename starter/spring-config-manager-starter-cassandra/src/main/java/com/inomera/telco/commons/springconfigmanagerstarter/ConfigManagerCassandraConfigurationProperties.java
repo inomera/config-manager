@@ -12,7 +12,7 @@ import static com.google.common.collect.Sets.newHashSet;
  */
 @Getter
 @Setter
-public class CassandraConfigurationProperties {
+public class ConfigManagerCassandraConfigurationProperties {
     private Set<CassandraNode> nodes = newHashSet();
     private String keyspace;
     private String schema;
