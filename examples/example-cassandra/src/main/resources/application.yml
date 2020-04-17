@@ -10,4 +10,4 @@ config-manager:
     keyspace: mps
     schema: create_if_not_exists
     sql:
-      select: select key, value from mps.app_settings where application = 'application'
+      select: select key, value from example_cassandra.app_settings where application = 'application'
