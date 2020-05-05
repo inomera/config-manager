@@ -14,8 +14,8 @@ import static com.google.common.collect.Sets.newHashSet;
 @Setter
 public class ConfigManagerCassandraConfigurationProperties {
     private Set<CassandraNode> nodes = newHashSet();
-    private String keyspace;
-    private String schema;
+    private String username;
+    private String password;
     private SqlStatements sql = new SqlStatements();
 
     @Getter
