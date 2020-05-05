@@ -10,8 +10,9 @@ config-manager:
     nodes:
       - host: localhost
         port: 9042
-    keyspace: mps
-    schema: create_if_not_exists
+    # Username & password are optional
+    username: cassandra
+    password: cassandra
     sql:
       select: select key, value from mps.app_settings where application = ?
 ```

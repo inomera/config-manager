@@ -1,8 +1,6 @@
 package com.inomera.telco.commons.springconfigmanagerstarter;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.CodecRegistry;
-import com.datastax.driver.core.Session;
+import com.datastax.driver.core.*;
 import com.inomera.telco.commons.config.ConcurrentHashMapConfigurationHolder;
 import com.inomera.telco.commons.config.ConfigurationHolder;
 import com.inomera.telco.commons.config.dao.CassandraConfigurationDao;
@@ -122,6 +120,7 @@ public class ConfigManagerCassandraAutoConfiguration {
         final Collection<InetSocketAddress> cassandraContactPoints = getCassandraContactPoints();
 
         return Cluster.builder()
+                .withAuthProvider(cassandraAuthProvider(cassandraConfigurationProperties()))
                 .withoutMetrics()
                 .withoutJMXReporting()
                 .addContactPointsWithPorts(cassandraContactPoints)
@@ -133,6 +132,15 @@ public class ConfigManagerCassandraAutoConfiguration {
     @ConditionalOnMissingBean(name = BEAN_CASSANDRA_SESSION)
     public Session cassandraSession(@Qualifier(BEAN_CASSANDRA_CLUSTER) Cluster cluster) {
         return cluster.connect();
+    }
+
+    private AuthProvider cassandraAuthProvider(ConfigManagerCassandraConfigurationProperties configurationProperties) {
+        final String username = configurationProperties.getUsername();
+        final String password = configurationProperties.getPassword();
+        if (StringUtils.isAllBlank(username, password)) {
+            return AuthProvider.NONE;
+        }
+        return new PlainTextAuthProvider(username, password);
     }
 
     private Collection<InetSocketAddress> getCassandraContactPoints() {
