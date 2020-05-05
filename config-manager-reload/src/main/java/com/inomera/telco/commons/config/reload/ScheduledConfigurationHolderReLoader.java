@@ -27,11 +27,11 @@ public class ScheduledConfigurationHolderReLoader implements ConfigurationHolder
 
     @Override
     public void reloadConfigurations() {
-        LOG.info("reloadConfigurations started");
+        LOG.debug("reloadConfigurations started");
 
         delegate.reloadConfigurations();
 
-        LOG.info("reloadConfigurations finished");
+        LOG.debug("reloadConfigurations finished");
     }
 
     private void reloadConfigurationsScheduled() {

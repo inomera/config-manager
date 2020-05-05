@@ -29,7 +29,7 @@ public class AsyncConfigurationHolderReLoader implements ConfigurationHolderReLo
     @Override
     public void reloadConfigurations() {
         executor.execute(() -> {
-            LOG.info("reloadConfigurations started");
+            LOG.debug("reloadConfigurations started");
 
             try {
                 delegate.reloadConfigurations();
@@ -38,7 +38,7 @@ public class AsyncConfigurationHolderReLoader implements ConfigurationHolderReLo
                 return;
             }
 
-            LOG.info("reloadConfigurations finished");
+            LOG.debug("reloadConfigurations finished");
         });
     }
 }
