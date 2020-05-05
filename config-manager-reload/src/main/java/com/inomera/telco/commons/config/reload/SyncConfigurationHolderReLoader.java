@@ -20,10 +20,10 @@ public class SyncConfigurationHolderReLoader implements ConfigurationHolderReLoa
 
     @Override
     public void reloadConfigurations() {
-        LOG.info("reloadConfigurations started");
+        LOG.debug("reloadConfigurations started");
 
         configurationHolder.reloadConfigurations();
 
-        LOG.info("reloadConfigurations finished");
+        LOG.debug("reloadConfigurations finished");
     }
 }
