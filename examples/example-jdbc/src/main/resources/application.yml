@@ -9,7 +9,6 @@ spring:
 
 config-manager:
   enabled: true
-  source: jdbc
   auto-reload: true
   reload-trigger: periodical
   reload-period-in-milliseconds: 60000
