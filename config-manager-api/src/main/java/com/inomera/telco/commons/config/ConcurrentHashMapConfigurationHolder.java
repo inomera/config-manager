@@ -15,6 +15,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * Caches all configuration into a ConcurrentHashMap. Reloads the map every 60 seconds
@@ -150,22 +152,39 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
 
             // check for emptiness. db problem might occur. keep current config.
             if (!tmpConfigurationsMap.isEmpty()) {
-
-                final Set<String> oldKeysSet = configurationsLocalMap.keySet();
-                Set<String> configKeysSet = new HashSet<>(oldKeysSet);
-                final Set<String> newKeysSet = tmpConfigurationsMap.keySet();
-                configKeysSet.addAll(newKeysSet);
-
-                configKeysSet.stream().filter(configKey -> !Objects.equals(configurationsLocalMap.get(configKey),
-                        tmpConfigurationsMap.get(configKey))).forEach(configKey ->
-                        changeListeners.getOrDefault(configKey, Collections.emptyMap()).values().forEach(listener ->
-                                listener.onChange(configKey, configurationsLocalMap.get(configKey), tmpConfigurationsMap.get(configKey))));
-
+                final Map<String, String> copyOfExistingConfigurations = new HashMap<>(configurationsLocalMap);
                 configurationsLocalMap = tmpConfigurationsMap;
+                executeChangeDetection(tmpConfigurationsMap, copyOfExistingConfigurations);
             }
         } finally {
             configurationsLocalMapLock.unlock();
         }
+    }
+
+    private void executeChangeDetection(Map<String, String> newValues, Map<String, String> oldValues) {
+        final Set<String> oldKeysSet = oldValues.keySet();
+        final Set<String> newKeysSet = newValues.keySet();
+
+        final Set<String> allConfigurationKeys = new HashSet<>(oldKeysSet);
+        allConfigurationKeys.addAll(newKeysSet);
+
+        allConfigurationKeys.stream()
+                .filter(changePredicate(newValues, oldValues))
+                .forEach(configKey -> invokeChangeListeners(configKey, newValues, oldValues));
+    }
+
+    private void invokeChangeListeners(String configKey, Map<String, String> newValues, Map<String, String> oldValues) {
+        changeListeners.getOrDefault(configKey, Collections.emptyMap())
+                .values()
+                .forEach(listenerInvoker(configKey, newValues, oldValues));
+    }
+
+    private Predicate<String> changePredicate(Map<String, String> newValues, Map<String, String> oldValues) {
+        return configKey -> !Objects.equals(oldValues.get(configKey), newValues.get(configKey));
+    }
+
+    private Consumer<ConfigurationChangeListener> listenerInvoker(String configKey, Map<String, String> newValues, Map<String, String> oldValues) {
+        return listener -> listener.onChange(configKey, oldValues.get(configKey), newValues.get(configKey));
     }
 
     @Override
