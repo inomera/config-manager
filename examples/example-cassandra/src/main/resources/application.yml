@@ -1,13 +1,15 @@
 config-manager:
   enabled: true
-  auto-reload: true
-  reload-trigger: periodical
-  reload-period-in-milliseconds: 60000
+  source: cassandra
+  reload:
+    enabled: true
+    trigger: periodical
+    period: 5
+    period-unit: seconds
   cassandra:
     nodes:
       - host: localhost
         port: 9042
     username: cassandra
     password: cassandra
-    sql:
-      select: select key, value from example_cassandra.app_settings where application = 'application'
+    select-sql: select key, value from example_cassandra.app_settings where application = 'application'

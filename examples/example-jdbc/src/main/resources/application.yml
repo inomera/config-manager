@@ -7,23 +7,27 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
 
+logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %5p [%logger{0}] %m%n"
+  level:
+    root: info
+    com.inomera: info
+
 config-manager:
   enabled: true
-  auto-reload: true
-  reload-trigger: periodical
-  reload-period-in-milliseconds: 60000
-  value-column-length: 90000000
-  datasource:
+  source: jdbc
+  reload:
+    enabled: true
+    trigger: periodical
+    period: 2
+    period-unit: seconds
+  jdbc:
     driver-class-name: org.h2.Driver
     url: 'jdbc:h2:mem:testdb;MODE=Oracle'
     username: sa
     password: password
-    hikari:
-      poolName: config-manager-db-pool
-      maximum-pool-size: 1
-      minimum-idle: 1
-  sql:
-    insert: INSERT INTO APP_SETTINGS (APPLICATION, PROFILE, LABEL, KEY, VALUE) VALUES ('application', 'dev', 'master', ?, ?)
-    select: SELECT KEY, VALUE FROM APP_SETTINGS
-    update: UPDATE APP_SETTINGS SET VALUE = ? WHERE KEY = ?
-    delete-by-prefix: DELETE FROM APP_SETTINGS WHERE KEY LIKE CONCAT(:prefix, '.%')
+    select-sql: SELECT KEY, VALUE FROM APP_SETTINGS
+  encryption:
+    enabled: true
+    secret-key: '6374ca4b80c0bfc051cfd9dd6d8d3e9e'

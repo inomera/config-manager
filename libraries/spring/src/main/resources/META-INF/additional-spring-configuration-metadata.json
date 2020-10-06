@@ -1,0 +1,222 @@
+{
+  "groups": [
+    {
+      "name": "config-manager",
+      "description": "Configuration manager configurations."
+    },
+    {
+      "name": "config-manager.reload",
+      "description": "Configurations for reloading mechanism."
+    },
+    {
+      "name": "config-manager.jdbc",
+      "description": "Configurations for jdbc data source."
+    },
+    {
+      "name": "config-manager.mongo",
+      "description": "Configurations for mongodb data source."
+    },
+    {
+      "name": "config-manager.cassandra",
+      "description": "Configurations for cassandra data source."
+    },
+    {
+      "name": "config-manager.properties",
+      "description": "Configurations for properties data source."
+    }
+  ],
+  "properties": [
+    {
+      "name": "config-manager.enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Enable or disable config-manager auto configurations."
+    },
+    {
+      "name": "config-manager.source",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Use one of 'jdbc', 'mongo', 'cassandra', or 'properties' values."
+    },
+    {
+      "name": "config-manager.jdbc.driver-class-name",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Write JDBC driver class name."
+    },
+    {
+      "name": "config-manager.jdbc.url",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Enter JDBC URL."
+    },
+    {
+      "name": "config-manager.jdbc.username",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Enter JDBC Username."
+    },
+    {
+      "name": "config-manager.jdbc.password",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Enter JDBC Password."
+    },
+    {
+      "name": "config-manager.jdbc.select-sql",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Enter select SQL. For example: SELECT SETTING_NAME, SETTING_VALUE FROM APP_SETTINGS."
+    },
+    {
+      "name": "config-manager.mongo.servers",
+      "type": "java.util.List<com.inomera.telco.commons.config.spring.configurationproperties.MongoDBConfigurationProperties.MongoServerAddressConfigurationProperties>",
+      "defaultValue": null,
+      "description": "Set host and port information of the server."
+    },
+    {
+      "name": "config-manager.mongo.ssl-enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Enable SSL encryption in communication with mongodb."
+    },
+    {
+      "name": "config-manager.mongo.db-name",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Set name of the mongoDB database which holds the configuration."
+    },
+    {
+      "name": "config-manager.mongo.collection",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Set name of the mongoDB collection which holds the configuration."
+    },
+    {
+      "name": "config-manager.mongo.key-field-name",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Set name of the field which holds the key for the configuration."
+    },
+    {
+      "name": "config-manager.mongo.value-field-name",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Set name of the field which holds the value for the configuration."
+    },
+    {
+      "name": "config-manager.mongo.query",
+      "type": "java.util.Map",
+      "defaultValue": null,
+      "description": "Set the search conditions that will bring the configuration."
+    },
+    {
+      "name": "config-manager.cassandra.nodes",
+      "type": "java.util.List<com.inomera.telco.commons.config.spring.configurationproperties.CassandraConfigurationProperties.CassandraNode>",
+      "defaultValue": null,
+      "description": "Set host and port fields of Cassandra Cluster which are required to connect."
+    },
+    {
+      "name": "config-manager.cassandra.select-sql",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Set sql “select” statement to create template queries or commands."
+    },
+    {
+      "name": "config-manager.cassandra.username",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Set username to be used while connecting to cassandra."
+    },
+    {
+      "name": "config-manager.cassandra.password",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Set password to be used while connecting to cassandra."
+    },
+    {
+      "name": "config-manager.properties.property-files",
+      "type": "java.lang.String[]",
+      "defaultValue": null,
+      "description": "List of strings which are the paths of property files. Examples: classpath:settings.properties, file:///home/username/settings.properties."
+    },
+    {
+      "name": "config-manager.reload.enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Set true if you need reloading properties automatically."
+    },
+    {
+      "name": "config-manager.reload.trigger",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Set one of `cron` or `periodical` values."
+    },
+    {
+      "name": "config-manager.reload.cron-expression",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Set cron expression to trigger reload."
+    },
+    {
+      "name": "config-manager.reload.period",
+      "type": "java.lang.Long",
+      "defaultValue": null,
+      "description": "Set reload period."
+    },
+    {
+      "name": "config-manager.reload.period-unit",
+      "type": "java.util.concurrent.TimeUnit",
+      "defaultValue": null,
+      "description": "Set reload period unit."
+    },
+    {
+      "name": "config-manager.encryption.enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Enable encryption for configuration values."
+    },
+    {
+      "name": "config-manager.encryption.secret-key",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Set secret key for encryption."
+    }
+  ],
+  "hints": [
+    {
+      "name": "config-manager.source",
+      "values": [
+        {
+          "value": "jdbc",
+          "description": "Uses JDBC as property source."
+        },
+        {
+          "value": "properties",
+          "description": "Uses specified property files as property sources."
+        },
+        {
+          "value": "mongo",
+          "description": "Uses mongodb as property source."
+        },
+        {
+          "value": "cassandra",
+          "description": "Uses cassandra as property source."
+        }
+      ]
+    },
+    {
+      "name": "config-manager.reload.trigger",
+      "values": [
+        {
+          "value": "cron",
+          "description": "Uses cron expression as trigger to reload properties."
+        },
+        {
+          "value": "periodical",
+          "description": "Uses fixed period as trigger to reload properties."
+        }
+      ]
+    }
+  ]
+}

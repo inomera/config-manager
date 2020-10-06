@@ -18,6 +18,8 @@ repositories {
 	mavenCentral()
 }
 
+compileJava.dependsOn(processResources)
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -27,8 +29,11 @@ dependencies {
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	implementation project(':spring-config-manager-starter-jdbc')
+	implementation project(':config-manager-spring')
 	implementation 'com.inomera.telco.commons:config-manager:1.0.2'
+
+	// Jasypt Decryption
+	implementation 'org.jasypt:jasypt:1.9.3'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
