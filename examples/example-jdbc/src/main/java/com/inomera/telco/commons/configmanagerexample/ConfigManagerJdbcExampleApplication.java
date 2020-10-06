@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct;
 public class ConfigManagerJdbcExampleApplication {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigManagerJdbcExampleApplication.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         final ConfigurableApplicationContext context = SpringApplication.run(ConfigManagerJdbcExampleApplication.class, args);
         final ConfigurationHolder configurationHolder = context.getBean(ConfigurationHolder.class);
 

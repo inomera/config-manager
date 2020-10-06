@@ -1,8 +1,11 @@
 config-manager:
   enabled: true
-  auto-reload: true
-  reload-trigger: periodical
-  reload-period-in-milliseconds: 60000
+  source: mongo
+  reload:
+    enabled: true
+    trigger: periodical
+    period: 5
+    period-unit: seconds
   mongo:
     servers:
       - host: 127.0.0.1
@@ -11,9 +14,9 @@ config-manager:
       application: application
       label: master
       profile: default
-    keyFieldName: key
-    valueFieldName: value
-    dbName: testDB
+    db-name: testDB
+    value-field-name: value
+    key-field-name: key
     collection: testCollection
 
 

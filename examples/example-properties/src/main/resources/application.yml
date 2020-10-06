@@ -1,6 +1,9 @@
 config-manager:
   enabled: true
-  property-files: classpath:settings.properties
-  auto-reload: true
-  reload-trigger: periodical
-  reload-period-in-milliseconds: 60000
+  source: properties
+  reload:
+    enabled: true
+    trigger: cron
+    cron-expression: '0/2 * * * * ?'
+  properties:
+    property-files: classpath:settings.properties
