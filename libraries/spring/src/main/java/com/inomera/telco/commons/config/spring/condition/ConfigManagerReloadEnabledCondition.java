@@ -16,6 +16,6 @@ public class ConfigManagerReloadEnabledCondition extends AllNestedConditions {
     }
 
     @ConditionalOnProperty(value = "config-manager.reload.enabled", havingValue = "true")
-    static class OnJdbcSourceEnabled {
+    static class OnAutoConfigReloadEnabled {
     }
 }

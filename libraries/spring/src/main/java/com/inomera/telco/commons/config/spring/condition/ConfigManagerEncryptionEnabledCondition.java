@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 /**
  * @author Serdar Kuzucu
  */
-public class ConfigManagerEnabledAndMongoSourceCondition extends AllNestedConditions {
-    public ConfigManagerEnabledAndMongoSourceCondition() {
+public class ConfigManagerEncryptionEnabledCondition extends AllNestedConditions {
+    public ConfigManagerEncryptionEnabledCondition() {
         super(ConfigurationPhase.PARSE_CONFIGURATION);
     }
 
@@ -15,7 +15,7 @@ public class ConfigManagerEnabledAndMongoSourceCondition extends AllNestedCondit
     static class OnConfigurationManagerEnabled {
     }
 
-    @ConditionalOnProperty(value = "config-manager.source", havingValue = "mongo")
-    static class OnMongoSourceEnabled {
+    @ConditionalOnProperty(value = "config-manager.encryption.enabled", havingValue = "true")
+    static class OnEncryptionEnabled {
     }
 }

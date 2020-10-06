@@ -28,3 +28,6 @@ config-manager:
     username: sa
     password: password
     select-sql: SELECT KEY, VALUE FROM APP_SETTINGS
+  encryption:
+    enabled: true
+    secret-key: '6374ca4b80c0bfc051cfd9dd6d8d3e9e'

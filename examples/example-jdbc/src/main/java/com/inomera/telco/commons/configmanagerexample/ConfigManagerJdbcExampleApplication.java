@@ -23,8 +23,10 @@ public class ConfigManagerJdbcExampleApplication {
         final ConfigurationHolder configurationHolder = context.getBean(ConfigurationHolder.class);
 
         final String demoValue = configurationHolder.getStringProperty("first-key");
+        final String decryptedValue = configurationHolder.getStringProperty("encrypted-key");
 
         LOG.info("first-key: {}", demoValue);
+        LOG.info("decryptedValue: {}", decryptedValue);
     }
 
     @Configuration
@@ -54,6 +56,8 @@ public class ConfigManagerJdbcExampleApplication {
 
             jdbcTemplate.execute("insert into app_settings (application, profile, label, key, value) values ('charging', 'prod', 'master', 'second-key', 'second-value-3')");
             jdbcTemplate.execute("insert into app_settings (application, profile, label, key, value) values ('charging', 'prod', 'master', 'fourth-key', 'fourth-value-3')");
+
+            jdbcTemplate.execute("insert into app_settings (application, profile, label, key, value) values ('application', 'default', 'master', 'encrypted-key', '{cipher}IAzAD7/dHwZOtaCEKm/XKw==')");
         }
     }
 }

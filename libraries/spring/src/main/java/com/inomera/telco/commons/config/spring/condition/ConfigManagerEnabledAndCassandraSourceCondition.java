@@ -16,6 +16,6 @@ public class ConfigManagerEnabledAndCassandraSourceCondition extends AllNestedCo
     }
 
     @ConditionalOnProperty(value = "config-manager.source", havingValue = "cassandra")
-    static class OnJdbcSourceEnabled {
+    static class OnCassandraSourceEnabled {
     }
 }

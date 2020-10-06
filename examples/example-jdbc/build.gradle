@@ -32,6 +32,9 @@ dependencies {
 	implementation project(':config-manager-spring')
 	implementation 'com.inomera.telco.commons:config-manager:1.0.2'
 
+	// Jasypt Decryption
+	implementation 'org.jasypt:jasypt:1.9.3'
+
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
