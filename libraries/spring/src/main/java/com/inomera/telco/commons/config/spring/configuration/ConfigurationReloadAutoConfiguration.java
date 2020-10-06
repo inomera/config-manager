@@ -28,10 +28,6 @@ import static com.inomera.telco.commons.config.spring.BeanNames.*;
 @Conditional(ConfigManagerReloadEnabledCondition.class)
 public class ConfigurationReloadAutoConfiguration {
 
-    public ConfigurationReloadAutoConfiguration() {
-        System.out.println();
-    }
-
     @Bean(BEAN_CM_RELOAD_SCHEDULER)
     @ConditionalOnMissingBean(name = BEAN_CM_RELOAD_SCHEDULER)
     public ScheduledExecutorService configurationHolderReLoaderTaskScheduler() {
