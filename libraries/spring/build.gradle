@@ -51,6 +51,9 @@ dependencies {
     // Mongo
     compileOnly 'org.mongodb:mongodb-driver:3.11.2'
 
+    // Jasypt Decryption
+    compileOnly 'org.jasypt:jasypt:1.9.3'
+
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.2.0')
     testCompile('org.junit.jupiter:junit-jupiter-params:5.2.0')
     testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')

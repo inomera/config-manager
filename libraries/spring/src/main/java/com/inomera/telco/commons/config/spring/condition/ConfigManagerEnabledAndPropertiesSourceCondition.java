@@ -16,6 +16,6 @@ public class ConfigManagerEnabledAndPropertiesSourceCondition extends AllNestedC
     }
 
     @ConditionalOnProperty(value = "config-manager.source", havingValue = "properties")
-    static class OnJdbcSourceEnabled {
+    static class OnPropertiesSourceEnabled {
     }
 }

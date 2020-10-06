@@ -169,6 +169,18 @@
       "type": "java.util.concurrent.TimeUnit",
       "defaultValue": null,
       "description": "Set reload period unit."
+    },
+    {
+      "name": "config-manager.encryption.enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Enable encryption for configuration values."
+    },
+    {
+      "name": "config-manager.encryption.secret-key",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Set secret key for encryption."
     }
   ],
   "hints": [

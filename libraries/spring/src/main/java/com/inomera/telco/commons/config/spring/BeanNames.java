@@ -19,4 +19,6 @@ public final class BeanNames {
     public static final String BEAN_CM_CASSANDRA_CLUSTER = "config-manager.cassandra-cluster";
     public static final String BEAN_CM_CASSANDRA_SESSION = "config-manager.cassandra-session";
     public static final String BEAN_CM_CASSANDRA_CONFIG_PROPERTIES = "config-manager.cassandra-configuration-properties";
+    public static final String BEAN_CM_CONFIGURATION_DECRYPTOR = "config-manager.configuration-decryptor";
+    public static final String BEAN_CM_JASYPT_ENCRYPTOR = "config-manager.jasypt-encryptor";
 }

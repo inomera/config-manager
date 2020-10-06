@@ -28,15 +28,17 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
     private static final String TRUE = "true";
     private static final String FALSE = "false";
 
-    private Map<String, Map<String, ConfigurationChangeListener>> changeListeners = new ConcurrentHashMap<>();
+    private final Map<String, Map<String, ConfigurationChangeListener>> changeListeners = new ConcurrentHashMap<>();
     private Map<String, String> configurationsLocalMap = new ConcurrentHashMap<>();
 
-    private Lock configurationsLocalMapLock = new ReentrantLock();
-    private ConfigurationFetcherService configurationFetcherService;
-    private ObjectMapper objectMapper;
+    private final Lock configurationsLocalMapLock = new ReentrantLock();
+    private final ConfigurationFetcherService configurationFetcherService;
+    private final ObjectMapper objectMapper;
+    private final ConfigurationPostProcessor configurationPostProcessor;
 
-    public ConcurrentHashMapConfigurationHolder(ConfigurationFetcherService configurationFetcherService) {
+    public ConcurrentHashMapConfigurationHolder(ConfigurationFetcherService configurationFetcherService, ConfigurationPostProcessor configurationPostProcessor) {
         this.configurationFetcherService = configurationFetcherService;
+        this.configurationPostProcessor = configurationPostProcessor != null ? configurationPostProcessor : new NoopConfigurationPostProcessor();
         this.objectMapper = new ObjectMapper();
         this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         this.reloadConfigurations();
@@ -152,6 +154,8 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
 
             // check for emptiness. db problem might occur. keep current config.
             if (!tmpConfigurationsMap.isEmpty()) {
+                tmpConfigurationsMap.replaceAll(configurationPostProcessor::postProcessConfiguration);
+
                 final Map<String, String> copyOfExistingConfigurations = new HashMap<>(configurationsLocalMap);
                 configurationsLocalMap = tmpConfigurationsMap;
                 LOG.info("Configurations reloaded [{}]", tmpConfigurationsMap.size());
