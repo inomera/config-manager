@@ -3,7 +3,7 @@
 ## Usage with Properties Files
 
 ```groovy
-implementation 'com.inomera.telco.commons:config-manager-spring:3.0.0'
+implementation 'com.inomera.telco.commons:config-manager-spring:3.1.0'
 ```
 
 ```yaml
@@ -21,7 +21,7 @@ config-manager:
 ## Usage with Relational DB
 
 ```groovy
-implementation 'com.inomera.telco.commons:config-manager-spring:3.0.0'
+implementation 'com.inomera.telco.commons:config-manager-spring:3.1.0'
 // Other dependencies for related jdbc driver
 ```
 
@@ -45,7 +45,7 @@ config-manager:
 ## Usage with Mongodb
 
 ```groovy
-implementation 'com.inomera.telco.commons:config-manager-spring:3.0.0'
+implementation 'com.inomera.telco.commons:config-manager-spring:3.1.0'
 implementation 'org.mongodb:mongodb-driver:3.11.2'
 ```
 
@@ -75,7 +75,7 @@ config-manager:
 ## Usage with Cassandra
 
 ```groovy
-implementation 'com.inomera.telco.commons:config-manager-spring:3.0.0'
+implementation 'com.inomera.telco.commons:config-manager-spring:3.1.0'
 implementation 'com.datastax.cassandra:cassandra-driver-core:3.6.0'
 implementation 'com.datastax.cassandra:cassandra-driver-mapping:3.6.0'
 implementation 'com.datastax.cassandra:cassandra-driver-extras:3.6.0'
@@ -97,6 +97,28 @@ config-manager:
     username: cassandra
     password: cassandra
     select-sql: select key, value from example_cassandra.app_settings where application = 'application'
+```
+
+## Encryption
+
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:3.1.0'
+implementation 'org.jasypt:jasypt:1.9.3'
+```
+
+```yaml
+config-manager:
+  enabled: true
+  source: properties
+  reload:
+    enabled: true
+    trigger: cron
+    cron-expression: '0/2 * * * * ?'
+  properties:
+    property-files: classpath:settings.properties
+  encryption:
+    enabled: true
+    secret-key: '12345678901234567890123456789012'
 ```
 
 # Publishing
