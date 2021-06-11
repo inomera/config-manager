@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.inomera.telco.commons.config.service.ConfigurationFetcherService;
 import com.inomera.telco.commons.lang.function.ThrowableFunction;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Caches all configuration into a ConcurrentHashMap. Reloads the map every 60 seconds
@@ -103,6 +106,26 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
     }
 
     @Override
+    public Double getDoubleProperty(String key) {
+        return convert(key, Double::valueOf, null);
+    }
+
+    @Override
+    public double getDoubleProperty(String key, double defaultValue) {
+        return convert(key, Double::valueOf, defaultValue);
+    }
+
+    @Override
+    public Float getFloatProperty(String key) {
+        return convert(key, Float::valueOf, null);
+    }
+
+    @Override
+    public float getFloatProperty(String key, float defaultValue) {
+        return convert(key, Float::valueOf, defaultValue);
+    }
+
+    @Override
     public Set<String> getStringSetProperty(String key, Set<String> defaultValue) {
         return convert(key, this::toStringSet, defaultValue);
     }
@@ -133,6 +156,16 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
     }
 
     @Override
+    public <T> Set<T> getJsonSetProperty(String key, Class<T> classToDeserialize) {
+        return convert(key, toSet(classToDeserialize, objectMapper), new HashSet<>());
+    }
+
+    @Override
+    public <T> Set<T> getJsonSetProperty(String key, Class<T> classToDeserialize, Set<T> defaultValue) {
+        return convert(key, toSet(classToDeserialize, objectMapper), defaultValue);
+    }
+
+    @Override
     public Properties getJavaProperties(String key) {
         final ThrowableFunction<String, Properties> converter = value -> {
             Properties properties = new Properties();
@@ -140,6 +173,36 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
             return properties;
         };
         return convert(key, converter, new Properties());
+    }
+
+    @Override
+    public <T extends Enum<T>> T getEnumValue(String key, Class<T> enumClass) {
+        return convert(key, toEnum(enumClass), null);
+    }
+
+    @Override
+    public <T extends Enum<T>> T getEnumValue(String key, Class<T> enumClass, T defaultValue) {
+        return convert(key, toEnum(enumClass), defaultValue);
+    }
+
+    @Override
+    public <T extends Enum<T>> List<T> getEnumList(String key, Class<T> enumClass) {
+        return convert(key, toEnumCollection(enumClass, ArrayList::new), new ArrayList<>());
+    }
+
+    @Override
+    public <T extends Enum<T>> List<T> getEnumList(String key, Class<T> enumClass, List<T> defaultValue) {
+        return convert(key, toEnumCollection(enumClass, ArrayList::new), defaultValue);
+    }
+
+    @Override
+    public <T extends Enum<T>> Set<T> getEnumSet(String key, Class<T> enumClass) {
+        return convert(key, toEnumCollection(enumClass, HashSet::new), new HashSet<>());
+    }
+
+    @Override
+    public <T extends Enum<T>> Set<T> getEnumSet(String key, Class<T> enumClass, Set<T> defaultValue) {
+        return convert(key, toEnumCollection(enumClass, HashSet::new), defaultValue);
     }
 
     @Override
@@ -227,6 +290,26 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
     private static <T> ThrowableFunction<String, List<T>> toList(Class<T> classToDeserialize, ObjectMapper objectMapper) {
         final CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(List.class, classToDeserialize);
         return value -> objectMapper.readValue(value, collectionType);
+    }
+
+    private static <T> ThrowableFunction<String, Set<T>> toSet(Class<T> classToDeserialize, ObjectMapper objectMapper) {
+        final CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(Set.class, classToDeserialize);
+        return value -> objectMapper.readValue(value, collectionType);
+    }
+
+    private static <T extends Enum<T>> ThrowableFunction<String, T> toEnum(Class<T> enumClass) {
+        return value -> EnumUtils.getEnum(enumClass, value);
+    }
+
+    private <T extends Enum<T>, C extends Collection<T>> ThrowableFunction<String, C> toEnumCollection(
+            Class<T> enumClass, Supplier<C> collectionSupplier) {
+        return value -> {
+            final String[] elements = StringUtils.splitPreserveAllTokens(value, ",");
+            return Arrays.stream(elements)
+                    .map(element -> EnumUtils.getEnum(enumClass, element))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toCollection(collectionSupplier));
+        };
     }
 
     private <T> T convert(String key, ThrowableFunction<String, T> converter, T defaultValue) {
