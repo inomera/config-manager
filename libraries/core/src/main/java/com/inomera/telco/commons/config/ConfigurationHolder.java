@@ -24,6 +24,14 @@ public interface ConfigurationHolder {
 
     boolean getBooleanProperty(String key, boolean defaultValue);
 
+    Double getDoubleProperty(String key);
+
+    double getDoubleProperty(String key, double defaultValue);
+
+    Float getFloatProperty(String key);
+
+    float getFloatProperty(String key, float defaultValue);
+
     Set<String> getStringSetProperty(String key, Set<String> defaultValue);
 
     Set<String> getStringSetProperty(String key);
@@ -38,7 +46,23 @@ public interface ConfigurationHolder {
 
     <T> List<T> getJsonListProperty(String key, Class<T> classToDeserialize, List<T> defaultValue);
 
+    <T> Set<T> getJsonSetProperty(String key, Class<T> classToDeserialize);
+
+    <T> Set<T> getJsonSetProperty(String key, Class<T> classToDeserialize, Set<T> defaultValue);
+
     Properties getJavaProperties(String key);
+
+    <T extends Enum<T>> T getEnumValue(String key, Class<T> enumClass);
+
+    <T extends Enum<T>> T getEnumValue(String key, Class<T> enumClass, T defaultValue);
+
+    <T extends Enum<T>> List<T> getEnumList(String key, Class<T> enumClass);
+
+    <T extends Enum<T>> List<T> getEnumList(String key, Class<T> enumClass, List<T> defaultValue);
+
+    <T extends Enum<T>> Set<T> getEnumSet(String key, Class<T> enumClass);
+
+    <T extends Enum<T>> Set<T> getEnumSet(String key, Class<T> enumClass, Set<T> defaultValue);
 
     void reloadConfigurations();
 
