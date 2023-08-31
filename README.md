@@ -3,7 +3,7 @@
 ## Usage with Properties Files
 
 ```groovy
-implementation 'com.inomera.telco.commons:config-manager-spring:3.1.0'
+implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
 ```
 
 ```yaml
@@ -21,7 +21,7 @@ config-manager:
 ## Usage with Relational DB
 
 ```groovy
-implementation 'com.inomera.telco.commons:config-manager-spring:3.1.0'
+implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
 // Other dependencies for related jdbc driver
 ```
 
@@ -45,8 +45,9 @@ config-manager:
 ## Usage with Mongodb
 
 ```groovy
-implementation 'com.inomera.telco.commons:config-manager-spring:3.1.0'
-implementation 'org.mongodb:mongodb-driver:3.11.2'
+implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
+compileOnly "org.mongodb:mongodb-driver-sync:4.8.1"
+compileOnly "org.mongodb:mongodb-driver-core:4.8.1"
 ```
 
 ```yaml
@@ -75,7 +76,7 @@ config-manager:
 ## Usage with Cassandra
 
 ```groovy
-implementation 'com.inomera.telco.commons:config-manager-spring:3.1.0'
+implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
 implementation 'com.datastax.cassandra:cassandra-driver-core:3.6.0'
 implementation 'com.datastax.cassandra:cassandra-driver-mapping:3.6.0'
 implementation 'com.datastax.cassandra:cassandra-driver-extras:3.6.0'
@@ -99,10 +100,64 @@ config-manager:
     select-sql: select key, value from example_cassandra.app_settings where application = 'application'
 ```
 
+## Usage with Redis
+
+To use redis as a data source, the following dependencies must be added.
+
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
+implementation 'org.redisson:redisson:3.23.4'
+```
+
+You need to specify **config-manager** related settings in your `application.yml` file.
+The `config-manager.redis.redisson.map-key` value must be a hash name that holds a collection of application settings
+stored in redis.
+
+Below is an example of _singleServerConfig_. You can specify the Redisson
+settings `config-manager.redis.redisson.config`
+in YAML format. For more information
+see https://github.com/redisson/redisson/wiki/2.-Configuration#262-single-instance-yaml-config-format.
+
+```yaml
+config-manager:
+  enabled: true
+  source: redis
+  reload:
+    enabled: true
+    trigger: periodical
+    period: 5
+    period-unit: seconds
+  redis:
+    redisson:
+      map-key: example-redis-dev
+      config: |
+        singleServerConfig:
+          idleConnectionTimeout: 10000
+          connectTimeout: 10000
+          timeout: 3000
+          retryAttempts: 3
+          retryInterval: 1500
+          password: null
+          username: null
+          subscriptionsPerConnection: 5
+          clientName: null
+          address: "redis://127.0.0.1:6379"
+          subscriptionConnectionMinimumIdleSize: 1
+          subscriptionConnectionPoolSize: 50
+          connectionMinimumIdleSize: 10
+          connectionPoolSize: 64
+          database: 0
+          dnsMonitoringInterval: 5000
+        threads: 2
+        nettyThreads: 4
+        codec: !<org.redisson.codec.Kryo5Codec> {}
+        transportMode: "NIO"
+```
+
 ## Encryption
 
 ```groovy
-implementation 'com.inomera.telco.commons:config-manager-spring:3.1.0'
+implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
 implementation 'org.jasypt:jasypt:1.9.3'
 ```
 
@@ -123,7 +178,7 @@ config-manager:
 
 # Publishing
 
-To publish a version to maven repository, 
+To publish a version to maven repository,
 you should edit your local gradle.properties file.
 
 The file is: `/path-to-user-home/.gradle/gradle.properties`
@@ -141,7 +196,7 @@ telcoTeamPassword=************************
 
 Then execute `gradle` `publish` task on the project.
 
-For example, to publish the project `lock-provider`, 
+For example, to publish the project `lock-provider`,
 you need to execute the following command in project root:
 
 ```
@@ -158,3 +213,27 @@ build.gradle > publishing > publications > mavenJava > version
 ```
 
 Please change the version wisely.
+
+# Changelog
+
+## 4.0.0 (2023-08-31)
+
+- Upgrade Spring Boot 3.1.1 and JDK 17 ([@atakan](https://git.telco.inomera.com/atakan))
+
+## 3.4.0 (2023-08-31)
+
+- Add Redis support ([@fatihbozik](https://git.telco.inomera.com/fatihbozik))
+
+## 3.3.0 (2021-06-11)
+
+- Adds new converter methods for the following basic types ([@sedran](https://git.telco.inomera.com/sedran)) 
+  - getDoubleProperty
+  - getFloatProperty
+  - getJsonSetProperty
+  - getEnumValue
+  - getEnumList
+  - getEnumSet
+
+## 3.1.0 (2021-06-11)
+
+Add configuration post processor support and encryption ([@sedran](https://git.telco.inomera.com/sedran))
