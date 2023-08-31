@@ -19,3 +19,6 @@ project(':example-nosql').projectDir = new File('examples/example-nosql')
 
 include 'example-cassandra'
 project(':example-cassandra').projectDir = new File('examples/example-cassandra')
+
+include 'example-redis'
+project(':example-redis').projectDir = new File('examples/example-redis')

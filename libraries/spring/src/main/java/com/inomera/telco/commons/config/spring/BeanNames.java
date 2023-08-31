@@ -21,4 +21,6 @@ public final class BeanNames {
     public static final String BEAN_CM_CASSANDRA_CONFIG_PROPERTIES = "config-manager.cassandra-configuration-properties";
     public static final String BEAN_CM_CONFIGURATION_DECRYPTOR = "config-manager.configuration-decryptor";
     public static final String BEAN_CM_JASYPT_ENCRYPTOR = "config-manager.jasypt-encryptor";
+    public static final String BEAN_CM_REDISSON_CONFIG = "config-manager.redisson-config";
+    public static final String BEAN_CM_REDISSON_CLIENT = "config-manager.redisson-client";
 }
