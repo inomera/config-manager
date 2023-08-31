@@ -1,0 +1,33 @@
+config-manager:
+  enabled: true
+  source: redis
+  reload:
+    enabled: true
+    trigger: periodical
+    period: 5
+    period-unit: seconds
+  redis:
+    redisson:
+      map-key: example-redis-dev
+      config: |
+        singleServerConfig:
+          idleConnectionTimeout: 10000
+          connectTimeout: 10000
+          timeout: 3000
+          retryAttempts: 3
+          retryInterval: 1500
+          password: null
+          username: null
+          subscriptionsPerConnection: 5
+          clientName: null
+          address: "redis://127.0.0.1:6379"
+          subscriptionConnectionMinimumIdleSize: 1
+          subscriptionConnectionPoolSize: 50
+          connectionMinimumIdleSize: 10
+          connectionPoolSize: 64
+          database: 0
+          dnsMonitoringInterval: 5000
+        threads: 2
+        nettyThreads: 4
+        codec: !<org.redisson.client.codec.StringCodec> {}
+        transportMode: "NIO"

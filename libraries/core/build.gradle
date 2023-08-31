@@ -37,6 +37,9 @@ dependencies {
     // Mongo
     compileOnly 'org.mongodb:mongodb-driver:3.11.2'
 
+    // Redis
+    compileOnly 'org.redisson:redisson:3.23.4'
+
     // Jasypt Decryption
     compileOnly 'org.jasypt:jasypt:1.9.3'
 

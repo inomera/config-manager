@@ -30,7 +30,6 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	implementation project(':config-manager-spring')
-	implementation 'com.inomera.telco.commons:config-manager:1.0.2'
 
 	// Jasypt Decryption
 	implementation 'org.jasypt:jasypt:1.9.3'
