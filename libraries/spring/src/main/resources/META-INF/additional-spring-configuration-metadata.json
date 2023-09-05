@@ -23,6 +23,14 @@
     {
       "name": "config-manager.properties",
       "description": "Configurations for properties data source."
+    },
+    {
+      "name": "config-manager.redis",
+      "description": "Configurations for Redis data source."
+    },
+    {
+      "name": "config-manager.redis.redisson",
+      "description": "Configurations for Redisson client."
     }
   ],
   "properties": [
@@ -36,7 +44,7 @@
       "name": "config-manager.source",
       "type": "java.lang.String",
       "defaultValue": null,
-      "description": "Use one of 'jdbc', 'mongo', 'cassandra', or 'properties' values."
+      "description": "Use one of 'jdbc', 'mongo', 'cassandra', 'redis', or 'properties' values."
     },
     {
       "name": "config-manager.jdbc.driver-class-name",
@@ -141,6 +149,18 @@
       "description": "List of strings which are the paths of property files. Examples: classpath:settings.properties, file:///home/username/settings.properties."
     },
     {
+      "name": "config-manager.redis.redisson.config",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "Redisson settings in yaml format. Example: https://github.com/redisson/redisson/wiki/2.-Configuration#262-single-instance-yaml-config-format."
+    },
+    {
+      "name": "config-manager.redis.redisson.map-key",
+      "type": "java.lang.String",
+      "defaultValue": null,
+      "description": "The Redisson map key where the settings are kept."
+    },
+    {
       "name": "config-manager.reload.enabled",
       "type": "java.lang.Boolean",
       "defaultValue": false,
@@ -202,6 +222,10 @@
         {
           "value": "cassandra",
           "description": "Uses cassandra as property source."
+        },
+        {
+          "value": "redis",
+          "description": "Uses Redis as property source."
         }
       ]
     },

@@ -20,6 +20,9 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'com.datastax.cassandra:cassandra-driver-core:3.6.0'
+    implementation 'com.datastax.cassandra:cassandra-driver-mapping:3.6.0'
+    implementation 'com.datastax.cassandra:cassandra-driver-extras:3.6.0'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
