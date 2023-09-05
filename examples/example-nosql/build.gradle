@@ -19,8 +19,18 @@ repositories {
     mavenCentral()
 }
 
+dependencyManagement {
+    dependencies {
+        dependency "org.mongodb:mongodb-driver-sync:${versions.mongodb}"
+        dependency "org.mongodb:bson:${versions.mongodb}"
+        dependency "org.mongodb:bson-record-codec:${versions.mongodb}"
+    }
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation "org.mongodb:mongodb-driver-sync:${versions.mongodb}"
+    implementation "org.mongodb:mongodb-driver-core:${versions.mongodb}"
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

@@ -24,6 +24,7 @@ import static com.inomera.telco.commons.config.spring.BeanNames.BEAN_CONFIGURATI
 @Import({ConfigManagerCassandraAutoConfiguration.class,
         ConfigManagerMongoAutoConfiguration.class,
         ConfigManagerJdbcAutoConfiguration.class,
+        ConfigManagerRedisAutoConfiguration.class,
         ConfigManagerDaoConfigurationFetcherServiceAutoConfiguration.class,
         ConfigManagerPropertiesAutoConfiguration.class,
         ConfigurationReloadAutoConfiguration.class,
@@ -40,7 +41,7 @@ public class ConfigurationHolderAutoConfiguration {
     }
 
     private ConfigurationPostProcessor getConfigurationPostProcessor(List<ConfigurationPostProcessor> configurationPostProcessors) {
-        if (configurationPostProcessors == null || configurationPostProcessors.size() == 0) {
+        if (configurationPostProcessors == null || configurationPostProcessors.isEmpty()) {
             return new NoopConfigurationPostProcessor();
         }
 

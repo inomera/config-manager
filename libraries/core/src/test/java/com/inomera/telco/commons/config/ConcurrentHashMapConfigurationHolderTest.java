@@ -163,7 +163,7 @@ class ConcurrentHashMapConfigurationHolderTest {
     void getIntegerProperty_success() {
         final Integer value = configurationHolder.getIntegerProperty("intProp");
         assertNotNull(value);
-        assertEquals(new Integer(123), value);
+        assertEquals(Integer.valueOf(123), value);
     }
 
     @Test
