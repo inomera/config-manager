@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Import;
 
 @Slf4j
 @SpringBootApplication
-@Import(value = ConfigurationHolderAutoConfiguration.class)
 public class ConfigManagerRedisExampleApplication {
 
     public static void main(String[] args) {

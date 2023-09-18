@@ -1,7 +1,6 @@
 package com.inomera.telco.commons.configmanagerexample;
 
 import com.inomera.telco.commons.config.ConfigurationHolder;
-import com.inomera.telco.commons.config.spring.configuration.ConfigurationHolderAutoConfiguration;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -10,13 +9,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootApplication
-@Import(value = ConfigurationHolderAutoConfiguration.class)
 public class ConfigManagerJdbcExampleApplication {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigManagerJdbcExampleApplication.class);
 

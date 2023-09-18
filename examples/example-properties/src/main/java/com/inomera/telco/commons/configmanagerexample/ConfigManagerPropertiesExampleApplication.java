@@ -10,7 +10,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
-@Import(value = ConfigurationHolderAutoConfiguration.class)
 public class ConfigManagerPropertiesExampleApplication {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigManagerPropertiesExampleApplication.class);
 
