@@ -260,15 +260,15 @@ Please change the version wisely.
 
 ## 4.0.0 (2023-08-31)
 
-- Upgrade Spring Boot 3.1.1 and JDK 17 ([@atakan](https://git.telco.inomera.com/atakan))
+- Upgrade Spring Boot 3.1.1 and JDK 17 ([@atakan](https://github.com/Atakan92))
 
 ## 3.4.0 (2023-08-31)
 
-- Add Redis support ([@fatihbozik](https://git.telco.inomera.com/fatihbozik))
+- Add Redis support ([@fatihbozik](https://github.com/FatihBozik))
 
 ## 3.3.0 (2021-06-11)
 
-- Adds new converter methods for the following basic types ([@sedran](https://git.telco.inomera.com/sedran)) 
+- Adds new converter methods for the following basic types ([@sedran](https://github.com/sedran)) 
   - getDoubleProperty
   - getFloatProperty
   - getJsonSetProperty
@@ -278,4 +278,4 @@ Please change the version wisely.
 
 ## 3.1.0 (2021-06-11)
 
-Add configuration post processor support and encryption ([@sedran](https://git.telco.inomera.com/sedran))
+Add configuration post processor support and encryption ([@sedran](https://github.com/sedran))
