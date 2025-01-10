@@ -24,7 +24,7 @@ It is a thin, fast multi datasource supported dynamic configuration holder.
 | 4.X.X                | 17         |
 
 
-# Commons Lang
+# Config Manager
 
 ![Build](https://github.com/inomera/config-manager/workflows/Build/badge.svg)
 
