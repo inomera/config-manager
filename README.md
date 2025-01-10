@@ -2,6 +2,11 @@
 
 ## Usage with Properties Files
 
+JDK 17
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
+```
+JDK 8+
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:3.4.0'
 ```
@@ -20,6 +25,12 @@ config-manager:
 
 ## Usage with Relational DB
 
+JDK 17
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
+// Other dependencies for related jdbc driver
+```
+JDK 8+
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:3.4.0'
 // Other dependencies for related jdbc driver
@@ -44,6 +55,13 @@ config-manager:
 
 ## Usage with Mongodb
 
+JDK 17
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
+compileOnly "org.mongodb:mongodb-driver-sync:4.8.1"
+compileOnly "org.mongodb:mongodb-driver-core:4.8.1"
+```
+JDK 8+
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:3.4.0'
 implementation 'org.mongodb:mongodb-driver:3.11.2'
@@ -74,6 +92,14 @@ config-manager:
 
 ## Usage with Cassandra
 
+JDK 17
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
+implementation 'com.datastax.cassandra:cassandra-driver-core:3.6.0'
+implementation 'com.datastax.cassandra:cassandra-driver-mapping:3.6.0'
+implementation 'com.datastax.cassandra:cassandra-driver-extras:3.6.0'
+```
+JDK 8+
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:3.4.0'
 implementation 'com.datastax.cassandra:cassandra-driver-core:3.6.0'
@@ -103,6 +129,12 @@ config-manager:
 
 To use redis as a data source, the following dependencies must be added.
 
+JDK 17
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
+implementation 'org.redisson:redisson:3.23.4'
+```
+JDK 8+
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:3.4.0'
 implementation 'org.redisson:redisson:3.23.4'
@@ -155,6 +187,13 @@ config-manager:
 
 ## Encryption
 
+JDK 17
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
+implementation 'org.jasypt:jasypt:1.9.3'
+```
+
+JDK 8+
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:3.4.0'
 implementation 'org.jasypt:jasypt:1.9.3'
@@ -195,11 +234,15 @@ telcoTeamPassword=************************
 
 Then execute `gradle` `publish` task on the project.
 
-For example, to publish the project `lock-provider`,
+For example, to publish the project `config-manager-core`, `config-manager-spring`
 you need to execute the following command in project root:
 
 ```
-gradle :lock-provider:publish
+gradle :config-manager-spring:publish
+``` 
+
+```
+gradle :config-manager-core:publish
 ``` 
 
 The repository will not allow you to publish the same version twice.
@@ -214,6 +257,10 @@ build.gradle > publishing > publications > mavenJava > version
 Please change the version wisely.
 
 # Changelog
+
+## 4.0.0 (2023-08-31)
+
+- Upgrade Spring Boot 3.1.1 and JDK 17 ([@atakan](https://git.telco.inomera.com/atakan))
 
 ## 3.4.0 (2023-08-31)
 

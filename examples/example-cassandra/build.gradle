@@ -1,12 +1,14 @@
 plugins {
-    id 'org.springframework.boot' version '2.2.2.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'org.springframework.boot' version '3.1.1'
+    id 'io.spring.dependency-management' version '1.1.0'
     id 'java'
 }
 
 group = 'com.inomera.telco.commons'
 version = '1.0.0'
-sourceCompatibility = '1.8'
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
 
 configurations {
     compileOnly {
@@ -20,9 +22,9 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'com.datastax.cassandra:cassandra-driver-core:3.6.0'
-    implementation 'com.datastax.cassandra:cassandra-driver-mapping:3.6.0'
-    implementation 'com.datastax.cassandra:cassandra-driver-extras:3.6.0'
+    implementation "com.datastax.cassandra:cassandra-driver-core:${versions.cassandra}"
+    implementation "com.datastax.cassandra:cassandra-driver-mapping:${versions.cassandra}"
+    implementation "com.datastax.cassandra:cassandra-driver-extras:${versions.cassandra}"
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

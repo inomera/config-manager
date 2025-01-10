@@ -1,6 +1,7 @@
 package com.inomera.telco.commons.configmanagerexample;
 
 import com.inomera.telco.commons.config.ConfigurationHolder;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

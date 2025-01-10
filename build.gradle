@@ -3,3 +3,10 @@ subprojects {
         mavenCentral()
     }
 }
+
+ext {
+    versions = [mongodb  : '4.8.1',
+                cassandra: '3.6.0',
+                redisson : '3.23.4',
+                h2       : '1.4.196']
+}
