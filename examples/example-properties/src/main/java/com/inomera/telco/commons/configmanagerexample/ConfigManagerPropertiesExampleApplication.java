@@ -1,6 +1,7 @@
 package com.inomera.telco.commons.configmanagerexample;
 
 import com.inomera.telco.commons.config.ConfigurationHolder;
+
 import com.inomera.telco.commons.config.spring.configuration.ConfigurationHolderAutoConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

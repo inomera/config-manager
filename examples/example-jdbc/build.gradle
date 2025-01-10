@@ -9,6 +9,7 @@ version = '1.0.0'
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
@@ -20,6 +21,7 @@ repositories {
 }
 
 compileJava.dependsOn(processResources)
+
 
 dependencyManagement {
     dependencies {
