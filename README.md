@@ -31,8 +31,8 @@ It is a thin, fast multi datasource supported dynamic configuration holder.
 
 | Artifact                   | Version                                                                                                                                                                                                                       |
 |----------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| commons-lang         | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=3.4.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
-| commons-lang          | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=4.0.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
+| config-manager-spring         | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=3.4.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
+| config-manager-spring          | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=4.0.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
 
 
 # Usage of This Library
