@@ -6,15 +6,19 @@ Project URL -> https://github.com/inomera/config-manager
 
 # Config Manager
 
-Config Manager is thin library that use for hold the application properties, configs in memory.
+**Config Manager** is a lightweight library designed to store application properties and configurations in memory efficiently.
 
-The library supports many datasource such as file (prop, yml), rdbms (oracle, mysql, postgres, mssql and so on), 
-no-sql (mongo, cassandra), cache servers (hazelcast, redis)
+The library supports various data sources, including:
+- **File-based configurations** (e.g., `.properties`, `.yml`)
+- **Relational databases** (e.g., Oracle, MySQL, PostgreSQL, SQL Server, etc.)
+- **NoSQL databases** (e.g., MongoDB, Cassandra)
+- **Cache servers** (e.g., Hazelcast, Redis)
 
-It works pull policies such as eager and lazy loading and also trigger and scheduled.
-It works also push policies pub-sub pattern such as hazelcast topic, redis channels or native java queue.
+It offers flexible loading strategies:
+- **Pull-based policies**, such as eager or lazy loading, with options for triggers and scheduled updates.
+- **Push-based policies**, using pub-sub patterns like Hazelcast topics, Redis channels, or native Java queues.
 
-It is a thin, fast multi datasource supported dynamic configuration holder.
+Config Manager is a lightweight, high-performance, multi-data-source-supported library for dynamic configuration management.
 
 # Compatibility Matrix
 
