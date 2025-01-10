@@ -1,3 +1,40 @@
+# INFO
+
+This project is now being developed on GitHub. It is also published on the Central Maven Repository.
+
+Project URL -> https://github.com/inomera/config-manager
+
+# Config Manager
+
+Config Manager is thin library that use for hold the application properties, configs in memory.
+
+The library supports many datasource such as file (prop, yml), rdbms (oracle, mysql, postgres, mssql and so on), 
+no-sql (mongo, cassandra), cache servers (hazelcast, redis)
+
+It works pull policies such as eager and lazy loading and also trigger and scheduled.
+It works also push policies pub-sub pattern such as hazelcast topic, redis channels or native java queue.
+
+It is a thin, fast multi datasource supported dynamic configuration holder.
+
+# Compatibility Matrix
+
+| Commons Lang Version | Java Version |
+|----------------------|------------|
+| 3.X.X                | 1.8 >=     |
+| 4.X.X                | 17         |
+
+
+# Commons Lang
+
+![Build](https://github.com/inomera/config-manager/workflows/Build/badge.svg)
+
+
+| Artifact                   | Version                                                                                                                                                                                                                       |
+|----------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| commons-lang         | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=3.4.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
+| commons-lang          | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=4.0.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
+
+
 # Usage of This Library
 
 ## Usage with Properties Files
@@ -6,6 +43,7 @@ JDK 17
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
 ```
+
 JDK 8+
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:3.4.0'
