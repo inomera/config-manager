@@ -1,10 +1,4 @@
-# INFO
-
-This project is now being developed on GitHub. It is also published on the Central Maven Repository.
-
-Project URL -> https://github.com/inomera/config-manager
-
-# Config Manager
+# Dynamic Config Manager
 
 **Config Manager** is a lightweight library designed to store application properties and configurations in memory efficiently.
 
