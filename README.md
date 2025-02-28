@@ -23,9 +23,10 @@ Config Manager is a lightweight, high-performance, multi-data-source-supported l
 # Compatibility Matrix
 
 | Commons Lang Version | Java Version |
-|----------------------|------------|
-| 3.X.X                | 1.8 >=     |
-| 4.X.X                | 17         |
+|----------------------|--------------|
+| 3.X.X                | 1.8 >=       |
+| 4.X.X                | 17           |
+| 5.X.X                | 23           |
 
 
 # Config Manager
@@ -33,15 +34,21 @@ Config Manager is a lightweight, high-performance, multi-data-source-supported l
 ![Build](https://github.com/inomera/config-manager/workflows/Build/badge.svg)
 
 
-| Artifact                   | Version                                                                                                                                                                                                                       |
-|----------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| config-manager-spring         | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=3.4.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
+| Artifact                   | Version                                                                                                                                                                                                                                        |
+|----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| config-manager-spring          | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=5.0.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
 | config-manager-spring          | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=4.0.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
+| config-manager-spring         | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=3.4.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
 
 
 # Usage of This Library
 
 ## Usage with Properties Files
+
+JDK 23
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:5.0.0'
+```
 
 JDK 17
 ```groovy
@@ -66,6 +73,12 @@ config-manager:
 ```
 
 ## Usage with Relational DB
+
+JDK 23
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:5.0.0'
+// Other dependencies for related jdbc driver
+```
 
 JDK 17
 ```groovy
@@ -96,6 +109,13 @@ config-manager:
 ```
 
 ## Usage with Mongodb
+
+JDK 23
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:5.0.0'
+compileOnly "org.mongodb:mongodb-driver-sync:5.3.0"
+compileOnly "org.mongodb:mongodb-driver-core:5.3.0"
+```
 
 JDK 17
 ```groovy
@@ -134,6 +154,13 @@ config-manager:
 
 ## Usage with Cassandra
 
+JDK 23
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:5.0.0'
+compileOnly "com.datastax.oss:java-driver-core:4.17.0"
+compileOnly "com.datastax.oss:java-driver-mapper-processor:4.17.0"
+```
+
 JDK 17
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
@@ -171,11 +198,18 @@ config-manager:
 
 To use redis as a data source, the following dependencies must be added.
 
+JDK 23
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:5.0.0'
+implementation 'org.redisson:redisson:3.45.0'
+```
+
 JDK 17
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:4.0.0'
 implementation 'org.redisson:redisson:3.23.4'
 ```
+
 JDK 8+
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:3.4.0'
@@ -228,6 +262,12 @@ config-manager:
 ```
 
 ## Encryption
+
+JDK 23
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:5.0.0'
+implementation 'org.jasypt:jasypt:1.9.3'
+```
 
 JDK 17
 ```groovy
@@ -299,6 +339,12 @@ build.gradle > publishing > publications > mavenJava > version
 Please change the version wisely.
 
 # Changelog
+
+## 5.0.0 (2025-02-28)
+
+- Upgrade Spring Boot 3.4.2 and JDK 23 ([@turgaycan](https://github.com/turgaycan))
+- Gradle 8.12.1
+- Cassandra driver has major change from 3.x.x to 4.x.x
 
 ## 4.0.0 (2023-08-31)
 

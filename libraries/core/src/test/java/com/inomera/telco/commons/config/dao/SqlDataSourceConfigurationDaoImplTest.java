@@ -16,11 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @SuppressWarnings("ALL")
 class SqlDataSourceConfigurationDaoImplTest {
-    private static final String CREATE_TABLE = "CREATE TABLE CFG (KEY VARCHAR2(10 CHAR), VALUE VARCHAR2(10 CHAR), PRIMARY KEY(KEY, VALUE));";
-    private static final String SELECT = "SELECT KEY, VALUE FROM CFG order by VALUE ASC;";
-    private static final String INSERT = "INSERT INTO CFG (KEY, VALUE) VALUES (:configKey, :configValue);";
-    private static final String UPDATE = "UPDATE CFG SET VALUE = :configValue WHERE KEY = :configKey;";
-    private static final String DELETE = "DELETE FROM CFG WHERE KEY LIKE CONCAT(:prefix, '.%');";
+    private static final String CREATE_TABLE = "CREATE TABLE CFG (\"KEY\" VARCHAR2(10 CHAR), \"VALUE\" VARCHAR2(10 CHAR), PRIMARY KEY(\"KEY\", \"VALUE\"));";
+    private static final String SELECT = "SELECT \"KEY\", \"VALUE\" FROM CFG order by \"VALUE\" ASC;";
+    private static final String INSERT = "INSERT INTO CFG (\"KEY\", \"VALUE\") VALUES (:configKey, :configValue);";
+    private static final String UPDATE = "UPDATE CFG SET \"VALUE\" = :configValue WHERE \"KEY\" = :configKey;";
+    private static final String DELETE = "DELETE FROM CFG WHERE \"KEY\" LIKE CONCAT(:prefix, '.%');";
     private static final String DELETE_ALL = "DELETE FROM CFG;";
 
     private SqlDataSourceConfigurationDaoImpl configurationDao;
@@ -46,9 +46,9 @@ class SqlDataSourceConfigurationDaoImplTest {
     @Test
     @DisplayName("Should fetch all configurations")
     void shouldFetchAllConfigurations() throws SQLException {
-        dataSource.getConnection().prepareStatement("INSERT INTO CFG (KEY, VALUE) VALUES ('a', '1');").execute();
-        dataSource.getConnection().prepareStatement("INSERT INTO CFG (KEY, VALUE) VALUES ('b', '2');").execute();
-        dataSource.getConnection().prepareStatement("INSERT INTO CFG (KEY, VALUE) VALUES ('c', '3');").execute();
+        dataSource.getConnection().prepareStatement("INSERT INTO CFG (\"KEY\", \"VALUE\") VALUES ('a', '1');").execute();
+        dataSource.getConnection().prepareStatement("INSERT INTO CFG (\"KEY\", \"VALUE\") VALUES ('b', '2');").execute();
+        dataSource.getConnection().prepareStatement("INSERT INTO CFG (\"KEY\", \"VALUE\") VALUES ('c', '3');").execute();
 
         final Map<String, String> allConfigurations = configurationDao.findAllConfigurations();
         assertEquals(3, allConfigurations.size());
@@ -60,10 +60,10 @@ class SqlDataSourceConfigurationDaoImplTest {
     @Test
     @DisplayName("Should not throw exception for duplicate keys")
     void shouldFetchAllConfigurationsWithoutThrowingDuplicateKeyException() throws SQLException {
-        dataSource.getConnection().prepareStatement("INSERT INTO CFG (KEY, VALUE) VALUES ('a', '1');").execute();
-        dataSource.getConnection().prepareStatement("INSERT INTO CFG (KEY, VALUE) VALUES ('b', '2');").execute();
-        dataSource.getConnection().prepareStatement("INSERT INTO CFG (KEY, VALUE) VALUES ('c', '3');").execute();
-        dataSource.getConnection().prepareStatement("INSERT INTO CFG (KEY, VALUE) VALUES ('a', '5');").execute();
+        dataSource.getConnection().prepareStatement("INSERT INTO CFG (\"KEY\", \"VALUE\") VALUES ('a', '1');").execute();
+        dataSource.getConnection().prepareStatement("INSERT INTO CFG (\"KEY\", \"VALUE\") VALUES ('b', '2');").execute();
+        dataSource.getConnection().prepareStatement("INSERT INTO CFG (\"KEY\", \"VALUE\") VALUES ('c', '3');").execute();
+        dataSource.getConnection().prepareStatement("INSERT INTO CFG (\"KEY\", \"VALUE\") VALUES ('a', '5');").execute();
 
         final Map<String, String> allConfigurations = configurationDao.findAllConfigurations();
         assertEquals(3, allConfigurations.size());

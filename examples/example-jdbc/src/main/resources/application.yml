@@ -20,14 +20,14 @@ config-manager:
   reload:
     enabled: true
     trigger: periodical
-    period: 2
+    period: 30
     period-unit: seconds
   jdbc:
     driver-class-name: org.h2.Driver
-    url: 'jdbc:h2:mem:testdb;MODE=Oracle'
+    url: 'jdbc:h2:mem:testdb;MODE=Oracle;NON_KEYWORDS=VALUE,KEY'
     username: sa
     password: password
-    select-sql: SELECT KEY, VALUE FROM APP_SETTINGS
+    select-sql: SELECT KEY, VALUE FROM APP_SETTINGS where APPLICATION = 'charging'
   encryption:
     enabled: true
     secret-key: '6374ca4b80c0bfc051cfd9dd6d8d3e9e'

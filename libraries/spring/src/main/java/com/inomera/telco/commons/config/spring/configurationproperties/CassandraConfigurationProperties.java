@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * @author Melek UZUN
+ * @author Turgay CAN
  */
 @Getter
 @Setter
@@ -16,6 +17,7 @@ public class CassandraConfigurationProperties {
     private String username;
     private String password;
     private String selectSql;
+    private String localDatacenter = "datacenter1";
 
     @Getter
     @Setter

@@ -74,7 +74,7 @@
       "name": "config-manager.jdbc.select-sql",
       "type": "java.lang.String",
       "defaultValue": null,
-      "description": "Enter select SQL. For example: SELECT SETTING_NAME, SETTING_VALUE FROM APP_SETTINGS."
+      "description": "Enter select SQL. For example: SELECT SETTING_NAME, SETTING_VALUE FROM APP_SETTINGS where APPLICATION='<application-name>'"
     },
     {
       "name": "config-manager.mongo.servers",
@@ -129,6 +129,12 @@
       "type": "java.lang.String",
       "defaultValue": null,
       "description": "Set sql “select” statement to create template queries or commands."
+    },
+    {
+      "name": "config-manager.cassandra.localDatacenter",
+      "type": "java.lang.String",
+      "defaultValue": "datacenter1",
+      "description": "Set “localDatacenter“ name that is required parameter for connection"
     },
     {
       "name": "config-manager.cassandra.username",
