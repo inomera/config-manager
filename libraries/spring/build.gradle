@@ -40,8 +40,10 @@ dependencies {
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${versions.spring}"
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
 
-    api 'com.inomera.telco.commons:config-manager-core:5.0.0'
-//    api project(':config-manager-core')
+    // Use for production
+    //api 'com.inomera.telco.commons:config-manager-core:5.0.0'
+    // Use for local development and testing
+    api project(':config-manager-core')
 
     // Cassandra
     compileOnly "com.datastax.oss:java-driver-core:${versions.cassandra}"
