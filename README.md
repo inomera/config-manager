@@ -24,9 +24,9 @@ Config Manager is a lightweight, high-performance, multi-data-source-supported l
 
 | Commons Lang Version | Java Version |
 |----------------------|--------------|
-| 3.X.X                | 1.8 >=       |
-| 4.X.X                | 17           |
 | 5.X.X                | 23           |
+| 4.X.X                | 17           |
+| 3.X.X                | 1.8 >=       |
 
 
 # Config Manager
