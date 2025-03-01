@@ -13,3 +13,4 @@ config-manager:
     username: cassandra
     password: cassandra
     select-sql: select key, value from example_cassandra.app_settings where application = 'application'
+    local-datacenter: datacenter1

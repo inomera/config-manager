@@ -1,6 +1,7 @@
 package com.inomera.telco.commons.config.dao;
 
-import com.datastax.driver.core.*;
+
+import com.datastax.oss.driver.api.core.cql.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ class CassandraConfigurationDaoTest {
 
     private CassandraConfigurationDaoImpl cassandraConfigurationDao;
 
-    private Session session;
+    private SyncCqlSession session;
 
     private PreparedStatement preparedStatement;
 
@@ -34,7 +35,7 @@ class CassandraConfigurationDaoTest {
 
     @BeforeEach
     void initialize() {
-        session = mock(Session.class);
+        session = mock(SyncCqlSession.class);
         preparedStatement = mock(PreparedStatement.class);
         boundStatement = mock(BoundStatement.class);
         resultSet = mock(ResultSet.class);

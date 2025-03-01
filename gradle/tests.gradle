@@ -13,13 +13,13 @@ test {
 }
 
 jacoco {
-    toolVersion = "0.8.10"
+    toolVersion = "0.8.12"
 }
 
 jacocoTestReport {
     reports {
         xml.required = true
         csv.required = true
-        html.outputLocation = file("${buildDir}/jacocoHtml")
+        html.outputLocation = file("${projectDir}/jacocoHtml")
     }
 }

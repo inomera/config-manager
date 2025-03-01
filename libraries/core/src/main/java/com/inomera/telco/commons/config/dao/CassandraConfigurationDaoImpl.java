@@ -1,9 +1,10 @@
 package com.inomera.telco.commons.config.dao;
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Session;
+
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.SyncCqlSession;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
@@ -11,13 +12,14 @@ import java.util.stream.Collectors;
 
 /**
  * @author Melek UZUN
+ * @author Turgay CAN
  */
 @RequiredArgsConstructor
 public class CassandraConfigurationDaoImpl implements ConfigurationDao {
-    private final Session session;
+    private final SyncCqlSession session;
     private final PreparedStatement selectByAppStatement;
 
-    public CassandraConfigurationDaoImpl(Session session, String selectSql) {
+    public CassandraConfigurationDaoImpl(SyncCqlSession session, String selectSql) {
         this.session = session;
         this.selectByAppStatement = session.prepare(selectSql);
     }
@@ -26,8 +28,9 @@ public class CassandraConfigurationDaoImpl implements ConfigurationDao {
     public Map<String, String> findAllConfigurations() {
         final BoundStatement boundStatement = selectByAppStatement.bind();
         final ResultSet resultSet = session.execute(boundStatement);
-        return resultSet.all().stream().collect(Collectors.toMap(row -> row.getString(0), row -> row.getString(1),
-                (firstValue, secondValue) -> secondValue));
+        return resultSet.all().stream()
+                .collect(Collectors.toMap(row -> row.getString(0), row -> row.getString(1),
+                (_, secondValue) -> secondValue));
     }
 
 }

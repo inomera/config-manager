@@ -1,6 +1,7 @@
 package com.inomera.telco.commons.configmanagerexample;
 
 import com.inomera.telco.commons.config.ConfigurationHolder;
+import com.inomera.telco.commons.lang.Assert;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -13,7 +14,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.annotation.PostConstruct;
 
 @SpringBootApplication
 public class ConfigManagerJdbcExampleApplication {
@@ -27,7 +27,9 @@ public class ConfigManagerJdbcExampleApplication {
         final String decryptedValue = configurationHolder.getStringProperty("encrypted-key");
 
         LOG.info("first-key: {}", demoValue);
+        assert demoValue != null;
         LOG.info("decryptedValue: {}", decryptedValue);
+        assert decryptedValue != null;
     }
 
     @Configuration
@@ -42,23 +44,23 @@ public class ConfigManagerJdbcExampleApplication {
                     "                APPLICATION VARCHAR2(255 CHAR), " +
                     "                PROFILE     VARCHAR2(255 CHAR), " +
                     "                LABEL       VARCHAR2(255 CHAR), " +
-                    "                KEY         VARCHAR2(255 CHAR), " +
-                    "                VALUE       CLOB, " +
-                    "                PRIMARY KEY (APPLICATION, PROFILE, LABEL, KEY) " +
+                    "                \"KEY\"         VARCHAR2(255 CHAR), " +
+                    "                \"VALUE\"       CLOB, " +
+                    "                PRIMARY KEY (APPLICATION, PROFILE, LABEL, \"KEY\") " +
                     "            );");
 
-            jdbcTemplate.execute("insert into app_settings (application, profile, label, key, value) values ('application', 'default', 'master', 'first-key', 'first-value')");
-            jdbcTemplate.execute("insert into app_settings (application, profile, label, key, value) values ('application', 'default', 'master', 'second-key', 'second-value')");
-            jdbcTemplate.execute("insert into app_settings (application, profile, label, key, value) values ('application', 'default', 'master', 'third-key', 'third-value')");
-            jdbcTemplate.execute("insert into app_settings (application, profile, label, key, value) values ('application', 'default', 'master', 'fifth-key', 'fifth-value')");
+            jdbcTemplate.execute("insert into app_settings (application, profile, label, \"KEY\", \"VALUE\") values ('charging', 'default', 'master', 'first-key', 'first-value')");
+            jdbcTemplate.execute("insert into app_settings (application, profile, label, \"KEY\", \"VALUE\") values ('charging', 'default', 'master', 'second-key', 'second-value')");
+            jdbcTemplate.execute("insert into app_settings (application, profile, label, \"KEY\", \"VALUE\") values ('charging', 'default', 'master', 'third-key', 'third-value')");
+            jdbcTemplate.execute("insert into app_settings (application, profile, label, \"KEY\", \"VALUE\") values ('charging', 'default', 'master', 'fifth-key', 'fifth-value')");
 
-            jdbcTemplate.execute("insert into app_settings (application, profile, label, key, value) values ('charging', 'default', 'master', 'second-key', 'second-value-2')");
-            jdbcTemplate.execute("insert into app_settings (application, profile, label, key, value) values ('charging', 'default', 'master', 'first-key', 'first-value-2')");
+            jdbcTemplate.execute("insert into app_settings (application, profile, label, \"KEY\", \"VALUE\") values ('application', 'default', 'master', 'second-key', 'second-value-2')");
+            jdbcTemplate.execute("insert into app_settings (application, profile, label, \"KEY\", \"VALUE\") values ('application', 'default', 'master', 'first-key', 'first-value-2')");
 
-            jdbcTemplate.execute("insert into app_settings (application, profile, label, key, value) values ('charging', 'prod', 'master', 'second-key', 'second-value-3')");
-            jdbcTemplate.execute("insert into app_settings (application, profile, label, key, value) values ('charging', 'prod', 'master', 'fourth-key', 'fourth-value-3')");
+            jdbcTemplate.execute("insert into app_settings (application, profile, label, \"KEY\", \"VALUE\") values ('application', 'prod', 'master', 'second-key', 'second-value-3')");
+            jdbcTemplate.execute("insert into app_settings (application, profile, label, \"KEY\", \"VALUE\") values ('application', 'prod', 'master', 'fourth-key', 'fourth-value-3')");
 
-            jdbcTemplate.execute("insert into app_settings (application, profile, label, key, value) values ('application', 'default', 'master', 'encrypted-key', '{cipher}IAzAD7/dHwZOtaCEKm/XKw==')");
+            jdbcTemplate.execute("insert into app_settings (application, profile, label, \"KEY\", \"VALUE\") values ('charging', 'default', 'master', 'encrypted-key', '{cipher}IAzAD7/dHwZOtaCEKm/XKw==')");
         }
     }
 }
