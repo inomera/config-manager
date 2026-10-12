@@ -22,11 +22,12 @@ Config Manager is a lightweight, high-performance, multi-data-source-supported l
 
 # Compatibility Matrix
 
-| Commons Lang Version | Java Version |
-|----------------------|--------------|
-| 5.X.X                | 23           |
-| 4.X.X                | 17           |
-| 3.X.X                | 1.8 >=       |
+| Config Manager Version | Java Version | Spring Boot Version |
+|------------------------|--------------|---------------------|
+| 6.X.X                  | 25           | 4.X                 |
+| 5.X.X                  | 23           | 3.X                 |
+| 4.X.X                  | 17           | 3.X                 |
+| 3.X.X                  | 1.8 >=       | 2.X                 |
 
 
 # Config Manager
@@ -36,6 +37,7 @@ Config Manager is a lightweight, high-performance, multi-data-source-supported l
 
 | Artifact                   | Version                                                                                                                                                                                                                                        |
 |----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| config-manager-spring          | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=6.0.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
 | config-manager-spring          | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=5.0.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
 | config-manager-spring          | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=4.0.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
 | config-manager-spring         | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=3.4.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
@@ -45,7 +47,12 @@ Config Manager is a lightweight, high-performance, multi-data-source-supported l
 
 ## Usage with Properties Files
 
-JDK 23
+JDK 25 (Spring Boot 4)
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:6.0.0'
+```
+
+JDK 23 (Spring Boot 3)
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:5.0.0'
 ```
@@ -74,7 +81,15 @@ config-manager:
 
 ## Usage with Relational DB
 
-JDK 23
+JDK 25 (Spring Boot 4)
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:6.0.0'
+// DataSourceBuilder lives in spring-boot-jdbc since Spring Boot 4
+implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+// Other dependencies for related jdbc driver
+```
+
+JDK 23 (Spring Boot 3)
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:5.0.0'
 // Other dependencies for related jdbc driver
@@ -110,7 +125,14 @@ config-manager:
 
 ## Usage with Mongodb
 
-JDK 23
+JDK 25 (Spring Boot 4)
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:6.0.0'
+compileOnly "org.mongodb:mongodb-driver-sync:5.13.0"
+compileOnly "org.mongodb:mongodb-driver-core:5.13.0"
+```
+
+JDK 23 (Spring Boot 3)
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:5.0.0'
 compileOnly "org.mongodb:mongodb-driver-sync:5.3.0"
@@ -154,7 +176,14 @@ config-manager:
 
 ## Usage with Cassandra
 
-JDK 23
+JDK 25 (Spring Boot 4)
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:6.0.0'
+compileOnly "org.apache.cassandra:java-driver-core:4.19.3"
+compileOnly "org.apache.cassandra:java-driver-mapper-processor:4.19.3"
+```
+
+JDK 23 (Spring Boot 3)
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:5.0.0'
 compileOnly "com.datastax.oss:java-driver-core:4.17.0"
@@ -198,7 +227,13 @@ config-manager:
 
 To use redis as a data source, the following dependencies must be added.
 
-JDK 23
+JDK 25 (Spring Boot 4)
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:6.0.0'
+implementation 'org.redisson:redisson:4.8.0'
+```
+
+JDK 23 (Spring Boot 3)
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:5.0.0'
 implementation 'org.redisson:redisson:3.45.0'
@@ -263,7 +298,13 @@ config-manager:
 
 ## Encryption
 
-JDK 23
+JDK 25 (Spring Boot 4)
+```groovy
+implementation 'com.inomera.telco.commons:config-manager-spring:6.0.0'
+implementation 'org.jasypt:jasypt:1.9.3'
+```
+
+JDK 23 (Spring Boot 3)
 ```groovy
 implementation 'com.inomera.telco.commons:config-manager-spring:5.0.0'
 implementation 'org.jasypt:jasypt:1.9.3'
@@ -339,6 +380,22 @@ build.gradle > publishing > publications > mavenJava > version
 Please change the version wisely.
 
 # Changelog
+
+## 6.0.0 (2026-10-12)
+
+**Breaking changes:** requires JDK 25 and Spring Boot 4. Applications on JDK 23 / Spring Boot 3 should stay on 5.x.
+
+- Upgrade Spring Boot 4.1.1 and JDK 25
+- Gradle 9.8.1
+- Jackson 2 (`com.fasterxml.jackson`) replaced with Jackson 3 (`tools.jackson`) 3.2.3.
+  Applications that used Jackson 2 transitively through this library must now declare it themselves.
+  JSON configurations are still read with Jackson 2 defaults, so their parsing behavior is unchanged.
+  Jackson 2 databind annotations (e.g. `com.fasterxml.jackson.databind.annotation.JsonDeserialize`) on configuration classes
+  are no longer recognized and must be migrated to their `tools.jackson.databind.annotation` equivalents.
+- Cassandra driver coordinates moved from `com.datastax.oss` to `org.apache.cassandra` (4.19.3), Java packages are unchanged
+- JDBC source needs `spring-boot-jdbc` (e.g. `spring-boot-starter-jdbc`) on the classpath, since `DataSourceBuilder` moved there in Spring Boot 4
+- Redisson 4.8.0, MongoDB driver 5.13.0, H2 2.5.252, Guava 33.7.2, commons-lang3 3.21.0, slf4j 2.0.20
+- Remove legacy `spring.factories` auto-configuration registration (`AutoConfiguration.imports` is used)
 
 ## 5.0.0 (2025-02-28)
 

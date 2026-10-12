@@ -63,6 +63,9 @@ class ConcurrentHashMapConfigurationHolderTest {
         configurationsMap.put("json.array", "[{\"name\": \"Inomera\"}]");
         configurationsMap.put("json.invalid", "12345678_test");
         configurationsMap.put("json.object.null", "null");
+        configurationsMap.put("json.object.null-primitive", "{\"count\": null}");
+        configurationsMap.put("json.object.trailing-content", "{\"name\": \"Inomera\"} trailing");
+        configurationsMap.put("json.object.enum-with-custom-to-string", "{\"level\": \"HIGH\"}");
 
         configurationsMap.put("javaPropertyKey", "propertyOne=valueOne\npropertyTwo=valueTwo");
 
@@ -852,6 +855,44 @@ class ConcurrentHashMapConfigurationHolderTest {
         assertEquals(6, configurationHolder.getIntegerProperty("b", 1453));
         assertEquals(1453, configurationHolder.getIntegerProperty("c", 1453));
         assertEquals(9, configurationHolder.getIntegerProperty("d", 1453));
+    }
+
+    @Test
+    @DisplayName("getJsonObjectProperty should read null as default value for primitive fields like Jackson 2")
+    void getJsonObjectProperty_shouldReadNullAsDefaultForPrimitiveField() {
+        final JsonLevelObject value = configurationHolder.getJsonObjectProperty("json.object.null-primitive", JsonLevelObject.class);
+        assertNotNull(value);
+        assertEquals(0, value.count);
+    }
+
+    @Test
+    @DisplayName("getJsonObjectProperty should ignore trailing content after json value like Jackson 2")
+    void getJsonObjectProperty_shouldIgnoreTrailingContent() {
+        final JsonObject value = configurationHolder.getJsonObjectProperty("json.object.trailing-content", JsonObject.class);
+        assertNotNull(value);
+        assertEquals("Inomera", value.getName());
+    }
+
+    @Test
+    @DisplayName("getJsonObjectProperty should read enums by name even when toString is overridden like Jackson 2")
+    void getJsonObjectProperty_shouldReadEnumByNameWhenToStringOverridden() {
+        final JsonLevelObject value = configurationHolder.getJsonObjectProperty("json.object.enum-with-custom-to-string", JsonLevelObject.class);
+        assertNotNull(value);
+        assertSame(Level.HIGH, value.level);
+    }
+
+    private enum Level {
+        LOW, HIGH;
+
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
+    }
+
+    private static class JsonLevelObject {
+        public int count;
+        public Level level;
     }
 
     private static class JsonObject {

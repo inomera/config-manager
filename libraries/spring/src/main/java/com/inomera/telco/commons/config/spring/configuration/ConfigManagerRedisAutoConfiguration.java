@@ -15,8 +15,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.IOException;
-
 import static com.inomera.telco.commons.config.spring.BeanNames.*;
 
 @Slf4j
@@ -29,7 +27,7 @@ public class ConfigManagerRedisAutoConfiguration {
     public Config redissonConfig(@Value("${config-manager.redis.redisson.config}") String config) {
         try {
             return Config.fromYAML(config);
-        } catch (IOException e) {
+        } catch (RuntimeException e) {
             throw new IllegalArgumentException("Can't parse redisson config", e);
         }
     }
