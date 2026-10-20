@@ -7,8 +7,10 @@ apply from: "${rootProject.rootDir}/gradle/publishing.gradle"
 
 group = 'com.inomera.telco.commons'
 version = rootProject.file('VERSION').text.trim()
-sourceCompatibility = JavaVersion.VERSION_23
-targetCompatibility = JavaVersion.VERSION_23
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+}
 
 configurations {
     compileOnly {
@@ -32,40 +34,44 @@ compileJava {
 }
 
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter:${versions.spring}"
-    implementation "org.springframework.boot:spring-boot-autoconfigure:${versions.spring}"
-    implementation "org.springframework.boot:spring-boot:${versions.spring}"
+    implementation "org.springframework.boot:spring-boot-starter:${rootProject.versions.spring}"
+    implementation "org.springframework.boot:spring-boot-autoconfigure:${rootProject.versions.spring}"
+    implementation "org.springframework.boot:spring-boot:${rootProject.versions.spring}"
 
-    compileOnly 'org.projectlombok:lombok:1.18.36'
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${versions.spring}"
-    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+    // DataSourceBuilder moved to spring-boot-jdbc in Spring Boot 4, needed only for the JDBC source
+    compileOnly "org.springframework.boot:spring-boot-jdbc:${rootProject.versions.spring}"
+
+    compileOnly "org.projectlombok:lombok:${rootProject.versions.lombok}"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${rootProject.versions.spring}"
+    annotationProcessor "org.projectlombok:lombok:${rootProject.versions.lombok}"
 
     // Use for production
-    //api 'com.inomera.telco.commons:config-manager-core:5.0.0'
+    //api 'com.inomera.telco.commons:config-manager-core:6.0.0'
     // Use for local development and testing
     api project(':config-manager-core')
 
     // Cassandra
-    compileOnly "com.datastax.oss:java-driver-core:${versions.cassandra}"
-    compileOnly "com.datastax.oss:java-driver-mapper-processor:${versions.cassandra}"
+    compileOnly "org.apache.cassandra:java-driver-core:${rootProject.versions.cassandra}"
+    compileOnly "org.apache.cassandra:java-driver-mapper-processor:${rootProject.versions.cassandra}"
 
     // Mongo
-    compileOnly "org.mongodb:mongodb-driver-sync:${versions.mongodb}"
-    compileOnly "org.mongodb:mongodb-driver-core:${versions.mongodb}"
+    compileOnly "org.mongodb:mongodb-driver-sync:${rootProject.versions.mongodb}"
+    compileOnly "org.mongodb:mongodb-driver-core:${rootProject.versions.mongodb}"
 
     // Redis
-    compileOnly "org.redisson:redisson:${versions.redisson}"
+    compileOnly "org.redisson:redisson:${rootProject.versions.redisson}"
 
     // Jasypt Decryption
     compileOnly 'org.jasypt:jasypt:1.9.3'
 
-    testImplementation('org.junit.jupiter:junit-jupiter-api:5.11.4')
-    testImplementation('org.junit.jupiter:junit-jupiter-params:5.11.4')
-    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.11.4')
-    testImplementation "org.mockito:mockito-core:5.15.2"
-    testImplementation('org.mockito:mockito-junit-jupiter:5.15.2')
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${rootProject.versions.junit}")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:${rootProject.versions.junit}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${rootProject.versions.junit}")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:${rootProject.versions.junit}")
+    testImplementation("org.mockito:mockito-core:${rootProject.versions.mockito}")
+    testImplementation("org.mockito:mockito-junit-jupiter:${rootProject.versions.mockito}")
     testImplementation('org.hamcrest:hamcrest:3.0')
-    testImplementation("com.h2database:h2:${versions.h2}")
+    testImplementation("com.h2database:h2:${rootProject.versions.h2}")
 
 }
 
