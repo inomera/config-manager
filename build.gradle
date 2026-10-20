@@ -6,10 +6,14 @@ subprojects {
 }
 
 ext {
-    versions = [mongodb  : '5.3.0',
-                cassandra: '4.17.0',
-                redisson : '3.45.0',
-                h2       : '2.3.232',
-                spring   : '3.4.2',
+    versions = [mongodb  : '5.13.0',
+                cassandra: '4.19.3',
+                redisson : '4.8.0',
+                h2       : '2.5.252',
+                spring   : '4.1.1',
+                jackson  : '3.2.3',
+                lombok   : '1.18.48',
+                junit    : '6.1.3',
+                mockito  : '5.24.0',
     ]
 }
