@@ -29,12 +29,12 @@ Config Manager is a lightweight, high-performance, multi-data-source-supported l
 ![Build](https://github.com/inomera/config-manager/workflows/Build/badge.svg)
 
 
-| Artifact                   | Version                                                                                                                                                                                                                                        |
-|----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| config-manager-spring          | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=6.0.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
-| config-manager-spring          | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=5.0.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
-| config-manager-spring          | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=4.0.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
-| config-manager-spring         | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring/badge.svg?version=3.4.0)](https://maven-badges.herokuapp.com/maven-central/com.inomera.telco.commons/config-manager-spring) |
+| Artifact                  | Version                                                                                                                                                                                                                  |
+|---------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **config-manager-spring** | [![Maven Central](https://img.shields.io/maven-central/v/com.inomera.telco.commons/config-manager-spring.svg?versionPrefix=6)](https://central.sonatype.com/artifact/com.inomera.telco.commons/config-manager-spring/6.0.0) |
+| **config-manager-spring** | [![Maven Central](https://img.shields.io/maven-central/v/com.inomera.telco.commons/config-manager-spring.svg?versionPrefix=5)](https://central.sonatype.com/artifact/com.inomera.telco.commons/config-manager-spring/5.0.0) |
+| **config-manager-spring** | [![Maven Central](https://img.shields.io/maven-central/v/com.inomera.telco.commons/config-manager-spring.svg?versionPrefix=4)](https://central.sonatype.com/artifact/com.inomera.telco.commons/config-manager-spring/4.0.0) |
+| **config-manager-spring** | [![Maven Central](https://img.shields.io/maven-central/v/com.inomera.telco.commons/config-manager-spring.svg?versionPrefix=3)](https://central.sonatype.com/artifact/com.inomera.telco.commons/config-manager-spring/3.4.0) |
 
 
 # Usage of This Library
