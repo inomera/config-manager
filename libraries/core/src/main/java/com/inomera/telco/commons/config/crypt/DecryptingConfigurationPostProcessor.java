@@ -3,6 +3,7 @@ package com.inomera.telco.commons.config.crypt;
 import com.inomera.telco.commons.config.ConfigurationPostProcessor;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 /**
  * @author Serdar Kuzucu
@@ -14,7 +15,7 @@ public class DecryptingConfigurationPostProcessor implements ConfigurationPostPr
 
     @Override
     public String postProcessConfiguration(String key, String value) {
-        if (StringUtils.startsWith(value, encryptedValuePrefix)) {
+        if (Strings.CS.startsWith(value, encryptedValuePrefix)) {
             value = StringUtils.substringAfter(value, encryptedValuePrefix);
             return configurationDecryptor.decrypt(key, value);
         }

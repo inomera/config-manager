@@ -1,15 +1,87 @@
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+
+group = 'com.inomera.telco.commons'
+
+ext {
+    versions = [java     : '25',
+                mongodb  : '5.13.0',
+                cassandra: '4.19.3',
+                redisson : '4.8.0',
+                h2       : '2.5.252',
+                spring   : '4.1.1',
+                jackson  : '3.2.3',
+                lombok   : '1.18.48',
+                junit    : '6.1.3',
+                junit_platform: '6.1.3',
+                mockito  : '5.24.0',
+    ]
+}
+
 subprojects {
+
+    group = rootProject.group
+
     repositories {
         mavenLocal()
         mavenCentral()
     }
+
+    // Java toolchain and compiler options are configured once here instead of
+    // being repeated in every module build script.
+    plugins.withId('java') {
+        java {
+            toolchain {
+                languageVersion = JavaLanguageVersion.of(rootProject.versions.java as int)
+            }
+        }
+
+        tasks.withType(JavaCompile).configureEach {
+            options.encoding = 'UTF-8'
+            options.compilerArgs << '-parameters'
+        }
+
+        // Surface deprecations in our own sources only. Checked-in generated protobuf test
+        // fixtures use APIs that protobuf 4.x deprecated and would drown out the signal.
+        tasks.named('compileJava') {
+            options.compilerArgs << '-Xlint:deprecation'
+        }
+
+        tasks.withType(Javadoc).configureEach {
+            options.encoding = 'UTF-8'
+            // Generated protobuf sources and Lombok output trip the doclint checks.
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
 }
 
-ext {
-    versions = [mongodb  : '5.3.0',
-                cassandra: '4.17.0',
-                redisson : '3.45.0',
-                h2       : '2.3.232',
-                spring   : '3.4.2',
-    ]
+// Sonatype Central Portal: hands the artifacts deployed to the OSSRH Staging API over to the
+// Portal. Sonatype matches the staged upload by IP, so run it in the same invocation:
+//   ./gradlew publish uploadToCentralPortal
+// -PcentralPublishingType=automatic releases without the manual "Publish" click in the Portal UI.
+def centralUsername = providers.gradleProperty('mavenUsername')
+def centralPassword = providers.gradleProperty('mavenPassword')
+def centralPublishingType = providers.gradleProperty('centralPublishingType').orElse('user_managed')
+def centralNamespace = group.toString()
+
+tasks.register('uploadToCentralPortal') {
+    group = 'publishing'
+    description = 'Hands the artifacts staged on the OSSRH Staging API over to the Central Portal.'
+    mustRunAfter { subprojects.collectMany { it.tasks.withType(PublishToMavenRepository).toList() } }
+
+    doLast {
+        def token = Base64.encoder.encodeToString("${centralUsername.get()}:${centralPassword.get()}".getBytes('UTF-8'))
+        def uri = URI.create('https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/' +
+                "${centralNamespace}?publishing_type=${centralPublishingType.get()}")
+        def request = HttpRequest.newBuilder(uri)
+                .header('Authorization', "Bearer ${token}")
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build()
+        def response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString())
+        if (response.statusCode() >= 300) {
+            throw new GradleException("Central Portal upload failed (HTTP ${response.statusCode()}): ${response.body()}")
+        }
+        logger.lifecycle("Handed over to the Central Portal (${centralPublishingType.get()}): ${response.body()}")
+    }
 }

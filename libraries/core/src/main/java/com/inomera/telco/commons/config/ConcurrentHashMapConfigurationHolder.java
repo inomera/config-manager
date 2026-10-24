@@ -1,8 +1,5 @@
 package com.inomera.telco.commons.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
 import com.inomera.telco.commons.config.service.ConfigurationFetcherService;
 import com.inomera.telco.commons.lang.function.ThrowableFunction;
 import org.apache.commons.lang3.BooleanUtils;
@@ -10,6 +7,10 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.type.CollectionType;
 
 import java.io.StringReader;
 import java.util.*;
@@ -42,8 +43,9 @@ public class ConcurrentHashMapConfigurationHolder implements ConfigurationHolder
     public ConcurrentHashMapConfigurationHolder(ConfigurationFetcherService configurationFetcherService, ConfigurationPostProcessor configurationPostProcessor) {
         this.configurationFetcherService = configurationFetcherService;
         this.configurationPostProcessor = configurationPostProcessor != null ? configurationPostProcessor : new NoopConfigurationPostProcessor();
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        this.objectMapper = JsonMapper.builderWithJackson2Defaults()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .build();
         this.reloadConfigurations();
     }
 

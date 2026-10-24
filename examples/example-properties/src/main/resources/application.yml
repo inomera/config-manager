@@ -5,5 +5,7 @@ config-manager:
     enabled: true
     trigger: cron
     cron-expression: '0/2 * * * * ?'
+  encryption:
+    enabled: true
   properties:
     property-files: classpath:settings.properties
