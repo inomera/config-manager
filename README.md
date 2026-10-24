@@ -340,36 +340,34 @@ The file is: `/path-to-user-home/.gradle/gradle.properties`
 
 For example: `~/.gradle/gradle.properties`
 
-Add credentials for nexus repository to `gradle.properties` file.
+Add your Central Portal user token and GPG signing key to `gradle.properties` file.
 
 Example `gradle.properties` file:
 
 ```
-telcoTeamUsername=********
-telcoTeamPassword=************************
+mavenUsername=********
+mavenPassword=************************
+signing.gnupg.keyName=****************
+# Needed when gradle runs from an IDE that does not inherit the shell PATH
+signing.gnupg.executable=/opt/homebrew/bin/gpg
 ```
 
-Then execute `gradle` `publish` task on the project.
-
-For example, to publish the project `config-manager-core`, `config-manager-spring`
-you need to execute the following command in project root:
+Then execute the following command in project root. Both modules are signed, uploaded to the
+OSSRH Staging API and handed over to the Central Portal in a single invocation:
 
 ```
-gradle :config-manager-spring:publish
-``` 
-
+./gradlew publish uploadToCentralPortal
 ```
-gradle :config-manager-core:publish
-``` 
+
+Sonatype matches the uploaded artifacts by IP address, so `publish` and `uploadToCentralPortal`
+must run in the same command, from the same machine. By default the deployment waits for a
+manual "Publish" click on https://central.sonatype.com/publishing/deployments; add
+`-PcentralPublishingType=automatic` to release it right away.
 
 The repository will not allow you to publish the same version twice.
 You need to change version of the artifact every time you want to publish.
 
-You can change version in `build.gradle` file of the sub-project.
-
-```
-build.gradle > publishing > publications > mavenJava > version
-```
+You can change version in the `VERSION` file at the project root.
 
 Please change the version wisely.
 

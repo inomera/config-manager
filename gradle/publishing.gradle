@@ -110,6 +110,23 @@ publishing {
             }
         }
     }
+
+    repositories {
+        maven {
+            // Sonatype's documented OSSRH Staging API deploy endpoint. The gradle-nexus plugin
+            // uploads to repositories/{id}/content/ instead, which answers the maven-metadata.xml
+            // lookup with 400 "Endpoint not supported". Releases still have to be handed over to
+            // the Central Portal afterwards, see the root `uploadToCentralPortal` task.
+            name = 'centralStaging'
+            url = project.version.endsWith('-SNAPSHOT')
+                    ? 'https://central.sonatype.com/repository/maven-snapshots/'
+                    : 'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/'
+            credentials {
+                username = project.findProperty('mavenUsername')
+                password = project.findProperty('mavenPassword')
+            }
+        }
+    }
 }
 
 signing {

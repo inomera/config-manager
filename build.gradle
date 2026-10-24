@@ -1,6 +1,6 @@
-plugins {
-    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
-}
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
 
 group = 'com.inomera.telco.commons'
 
@@ -56,15 +56,32 @@ subprojects {
     }
 }
 
-// Sonatype Central Portal Nexus Yapılandırması
-nexusPublishing {
-    repositories {
-        sonatype {
-            nexusUrl = uri('https://ossrh-staging-api.central.sonatype.com/service/local/')
-            snapshotRepositoryUrl = uri('https://central.sonatype.com/repository/maven-snapshots/')
+// Sonatype Central Portal: hands the artifacts deployed to the OSSRH Staging API over to the
+// Portal. Sonatype matches the staged upload by IP, so run it in the same invocation:
+//   ./gradlew publish uploadToCentralPortal
+// -PcentralPublishingType=automatic releases without the manual "Publish" click in the Portal UI.
+def centralUsername = providers.gradleProperty('mavenUsername')
+def centralPassword = providers.gradleProperty('mavenPassword')
+def centralPublishingType = providers.gradleProperty('centralPublishingType').orElse('user_managed')
+def centralNamespace = group.toString()
 
-            username = (project.findProperty('mavenUsername') ?: '') as String
-            password = (project.findProperty('mavenPassword') ?: '') as String
+tasks.register('uploadToCentralPortal') {
+    group = 'publishing'
+    description = 'Hands the artifacts staged on the OSSRH Staging API over to the Central Portal.'
+    mustRunAfter { subprojects.collectMany { it.tasks.withType(PublishToMavenRepository).toList() } }
+
+    doLast {
+        def token = Base64.encoder.encodeToString("${centralUsername.get()}:${centralPassword.get()}".getBytes('UTF-8'))
+        def uri = URI.create('https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/' +
+                "${centralNamespace}?publishing_type=${centralPublishingType.get()}")
+        def request = HttpRequest.newBuilder(uri)
+                .header('Authorization', "Bearer ${token}")
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build()
+        def response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString())
+        if (response.statusCode() >= 300) {
+            throw new GradleException("Central Portal upload failed (HTTP ${response.statusCode()}): ${response.body()}")
         }
+        logger.lifecycle("Handed over to the Central Portal (${centralPublishingType.get()}): ${response.body()}")
     }
 }
