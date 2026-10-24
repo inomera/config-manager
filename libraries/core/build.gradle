@@ -2,15 +2,21 @@ plugins {
     id 'java-library'
 }
 
-apply from: "${rootProject.rootDir}/gradle/tests.gradle"
-apply from: "${rootProject.rootDir}/gradle/publishing.gradle"
-
 group = 'com.inomera.telco.commons'
 version = rootProject.file('VERSION').text.trim()
 java {
     sourceCompatibility = JavaVersion.VERSION_25
     targetCompatibility = JavaVersion.VERSION_25
 }
+
+ext {
+    pubName = 'config-manager-core'
+    pubDescription = 'Enterprise Grade Multi Datasource Dynamic Configuration Holder Java Library.'
+    pubRepo = 'telco-commons-config-manager'
+}
+
+apply from: "${rootProject.rootDir}/gradle/tests.gradle"
+apply from: "${rootProject.rootDir}/gradle/publishing.gradle"
 
 configurations {
     compileOnly {
@@ -20,6 +26,8 @@ configurations {
         extendsFrom compileOnly
     }
 }
+
+compileJava.dependsOn(processResources)
 
 dependencies {
     api "tools.jackson.core:jackson-core:${rootProject.versions.jackson}"
@@ -56,21 +64,4 @@ dependencies {
     testImplementation('org.hamcrest:hamcrest:3.0')
     testImplementation("com.h2database:h2:${rootProject.versions.h2}")
 
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId = "${project.group}"
-            artifactId = "${project.name}"
-            version = "${project.version}"
-
-            from components.java
-            artifact tasks.sourceJar
-        }
-    }
-}
-
-tasks.generatePomFileForMavenJavaPublication {
-    destination = file("${project.projectDir}/build/publications/mavenJava/${project.name}-${project.version}.pom")
 }
